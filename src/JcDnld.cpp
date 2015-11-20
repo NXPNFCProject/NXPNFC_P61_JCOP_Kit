@@ -85,7 +85,7 @@ tJBL_STATUS JCDNLD_Init(IChannel_t *channel)
 **
 ** Function:        JCDNLD_StartDownload
 **
-** Description:     Starts the JCOP update over DWP
+** Description:     Starts the JCOP update
 **
 ** Returns:         SUCCESS if ok.
 **

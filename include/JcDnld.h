@@ -39,7 +39,7 @@ unsigned char JCDNLD_Init(IChannel *channel);
 **
 ** Function:        JCDNLD_StartDownload
 **
-** Description:     Starts the JCOP update over DWP
+** Description:     Starts the JCOP update
 **
 ** Returns:         SUCCESS if ok.
 **
