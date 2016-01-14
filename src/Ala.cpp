@@ -525,7 +525,7 @@ tJBL_STATUS ALA_OpenChannel(Ala_ImageInfo_t *Os_info, tJBL_STATUS status,
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
     Os_info->channel_cnt = 0x00;
     ALOGD("%s: enter", fn);
-    if(Os_info == NULL &&
+    if(Os_info == NULL ||
        pTranscv_Info == NULL)
     {
         ALOGD("%s: Invalid parameter", fn);
@@ -598,7 +598,7 @@ tJBL_STATUS ALA_SelectAla(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
 #endif
     ALOGD("%s: enter", fn);
 
-    if(Os_info == NULL &&
+    if(Os_info == NULL ||
        pTranscv_Info == NULL)
     {
         ALOGD("%s: Invalid parameter", fn);
@@ -718,7 +718,7 @@ tJBL_STATUS ALA_StoreData(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
     INT32 xx=0, len = 0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
     ALOGD("%s: enter", fn);
-    if(Os_info == NULL &&
+    if(Os_info == NULL ||
        pTranscv_Info == NULL)
     {
         ALOGD("%s: Invalid parameter", fn);
@@ -1622,7 +1622,7 @@ tJBL_STATUS ALA_CloseChannel(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_T
     UINT8 cnt = 0;
     ALOGD("%s: enter",fn);
 
-    if(Os_info == NULL &&
+    if(Os_info == NULL ||
        pTranscv_Info == NULL)
     {
         ALOGE("Invalid parameter");
@@ -2953,7 +2953,7 @@ tJBL_STATUS ALA_getAppletLsStatus(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
 
     ALOGD("%s: enter", fn);
 
-    if(Os_info == NULL &&
+    if(Os_info == NULL ||
        pTranscv_Info == NULL)
     {
         ALOGD("%s: Invalid parameter", fn);

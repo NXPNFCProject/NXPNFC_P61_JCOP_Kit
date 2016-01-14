@@ -282,7 +282,6 @@ tJBL_STATUS JcopOsDwnld::GetInfo(JcopOs_ImageInfo_t* pImageInfo, tJBL_STATUS sta
                                  "/data/nfc/JcopOs_Update2.apdu",
                                  "/data/nfc/JcopOs_Update3.apdu"};
 
-    memcpy(pImageInfo->fls_path, (char *)path[pImageInfo->index], strlen(path[pImageInfo->index]));
     bool stat = false;
     IChannel_t *mchannel = gpJcopOs_Dwnld_Context->channel;
     INT32 recvBufferActualSize = 0;
@@ -297,6 +296,8 @@ tJBL_STATUS JcopOsDwnld::GetInfo(JcopOs_ImageInfo_t* pImageInfo, tJBL_STATUS sta
     }
     else
     {
+        memcpy(pImageInfo->fls_path, (char *)path[pImageInfo->index], strlen(path[pImageInfo->index]));
+
         memset(pTranscv_Info->sSendData, 0, 1024);
         pTranscv_Info->timeout = gTransceiveTimeout;
         pTranscv_Info->sSendlength = (UINT32)sizeof(GetInfo_APDU);
