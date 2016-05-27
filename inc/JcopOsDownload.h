@@ -22,7 +22,7 @@ typedef struct JcopOs_TranscieveInfo
 {
     INT32 timeout;
     UINT8 sRecvData[1024];
-    UINT8 sSendData[1024];
+    UINT8 *sSendData;
     INT32 sSendlength;
     int sRecvlength;
 }JcopOs_TranscieveInfo_t;
@@ -72,6 +72,8 @@ static UINT8 GetInfo_Data[] = {0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x72, 0x4F, 0
 #define JCOP_UPDATE_STATE3 3
 #define JCOP_MAX_RETRY_CNT 3
 #define JCOP_INFO_PATH  "/data/nfc/jcop_info.txt"
+
+#define JCOP_MAX_BUF_SIZE 10240
 
 class JcopOsDwnld
 {

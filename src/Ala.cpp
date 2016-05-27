@@ -104,12 +104,13 @@ BOOLEAN initialize (IChannel_t* channel)
         return (FALSE);
     }
     gpAla_Dwnld_Context->mchannel = channel;
-#if(NXP_LDR_SVC_VER_2 == TRUE)
+
 #ifdef JCOP3_WR
     cmd_count = 0;
     SendBack_cmds = false;
     islastcmdLoad = false;
 #endif
+#if(NXP_LDR_SVC_VER_2 == TRUE)
     fAID_MEM = fopen(AID_MEM_PATH,"r");
 
     if(fAID_MEM == NULL)
@@ -2176,7 +2177,7 @@ tJBL_STATUS Send_Backall_Loadcmds(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
     }
     else
     {
-        while(cmd_count > 0)
+        while(cmd_count-- > 0)
         {
             pTranscv_Info->sSendlength = pBuffer[0];
             memcpy(pTranscv_Info->sSendData, &pBuffer[1], pTranscv_Info->sSendlength);
@@ -2188,19 +2189,13 @@ tJBL_STATUS Send_Backall_Loadcmds(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
                                         pTranscv_Info->sRecvlength,
                                         recvBufferActualSize,
                                         pTranscv_Info->timeout);
-#if(NXP_LDR_SVC_VER_2 == TRUE)
-            cmd_count--;
-#endif
+
             if(stat != TRUE ||
                (recvBufferActualSize < 2))
             {
                 ALOGE("%s: Transceive failed; status=0x%X", fn, stat);
             }
-#if(NXP_LDR_SVC_VER_2 == TRUE)
             else if(cmd_count == 0x00) //Last command in the buffer
-#else
-            else if(cmd_count == 0x01) //Last command in the buffer
-#endif
             {
 
                 if (islastcmdLoad == false)
@@ -2242,16 +2237,10 @@ tJBL_STATUS Send_Backall_Loadcmds(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
             {
                 /*Error condition hence exiting the loop*/
                 status = Process_EseResponse(pTranscv_Info, recvBufferActualSize, Os_info);
-#if(NXP_LDR_SVC_VER_2 == TRUE)
                 /*If the sending of Load fails reset the count*/
                 cmd_count=0;
-#endif
-
                 break;
             }
-#if(NXP_LDR_SVC_VER_2 == FALSE)
-            cmd_count--;
-#endif
         }
     }
     memset(Cmd_Buffer, 0, sizeof(Cmd_Buffer));

@@ -12,3 +12,4 @@
 | :-------------: |:-------------:| :-----:|
 | android-6.0.0_r1                     |  3.1.0_M (PN547C2/PN548C2) |  SEAccessKit_AR3.1.0_OpnSrc |
 | android-6.0.0_r1                     |  3.2.0_M (PN547C2/PN548C2) |  SEAccessKit_AR3.2.0_OpnSrc |
+| android-6.0.1_r17                    |  3.3.0_M (PN551/PN548C2)   |  SEAccessKit_AR3.3.0_OpnSrc |

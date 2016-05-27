@@ -84,6 +84,16 @@ bool JcopOsDwnld::initialize (IChannel_t *channel)
             ALOGD("%s: Memory allocation for IChannel is failed", fn);
             return (false);
         }
+        gpJcopOs_Dwnld_Context->pJcopOs_TransInfo.sSendData = (UINT8*)malloc(sizeof(UINT8)*JCOP_MAX_BUF_SIZE);
+        if(gpJcopOs_Dwnld_Context->pJcopOs_TransInfo.sSendData != NULL)
+        {
+            memset(gpJcopOs_Dwnld_Context->pJcopOs_TransInfo.sSendData, 0, JCOP_MAX_BUF_SIZE);
+        }
+        else
+        {
+            ALOGD("%s: Memory allocation for SendBuf is failed", fn);
+            return (false);
+        }
     }
     else
     {
@@ -116,6 +126,11 @@ void JcopOsDwnld::finalize ()
         {
             free(gpJcopOs_Dwnld_Context->channel);
             gpJcopOs_Dwnld_Context->channel = NULL;
+        }
+        if(gpJcopOs_Dwnld_Context->pJcopOs_TransInfo.sSendData != NULL)
+        {
+            free(gpJcopOs_Dwnld_Context->pJcopOs_TransInfo.sSendData);
+            gpJcopOs_Dwnld_Context->pJcopOs_TransInfo.sSendData = NULL;
         }
         free(gpJcopOs_Dwnld_Context);
         gpJcopOs_Dwnld_Context = NULL;
@@ -298,7 +313,7 @@ tJBL_STATUS JcopOsDwnld::GetInfo(JcopOs_ImageInfo_t* pImageInfo, tJBL_STATUS sta
     {
         memcpy(pImageInfo->fls_path, (char *)path[pImageInfo->index], strlen(path[pImageInfo->index]));
 
-        memset(pTranscv_Info->sSendData, 0, 1024);
+        memset(pTranscv_Info->sSendData, 0, JCOP_MAX_BUF_SIZE);
         pTranscv_Info->timeout = gTransceiveTimeout;
         pTranscv_Info->sSendlength = (UINT32)sizeof(GetInfo_APDU);
         pTranscv_Info->sRecvlength = 1024;
@@ -421,7 +436,7 @@ tJBL_STATUS JcopOsDwnld::load_JcopOS_image(JcopOs_ImageInfo_t *Os_info, tJBL_STA
         wIndex=0;
         wLen=0;
         wCount=0;
-        memset(pTranscv_Info->sSendData,0x00,1024);
+        memset(pTranscv_Info->sSendData,0x00,JCOP_MAX_BUF_SIZE);
         pTranscv_Info->sSendlength=0;
 
         ALOGE("%s; wIndex = 0", fn);
