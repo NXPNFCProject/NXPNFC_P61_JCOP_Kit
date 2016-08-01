@@ -114,13 +114,14 @@ bool JCDNLD_DeInit()
 {
     static const char fn[] = "JCDNLD_DeInit";
     BOOLEAN stat = FALSE;
-    channel = gpJcopOs_Dwnld_Context->channel;
     ALOGD("%s: enter", fn);
-    if(channel != NULL)
+
+    if(gpJcopOs_Dwnld_Context != NULL)
     {
-        if(channel->doeSE_Reset != NULL)
+        channel = gpJcopOs_Dwnld_Context->channel;
+        if((channel != NULL) && (channel->doeSE_JcopDownLoadReset != NULL))
         {
-            channel->doeSE_Reset();
+            channel->doeSE_JcopDownLoadReset();
             if(channel->close != NULL)
             {
                 stat = channel->close(jcHandle);
@@ -138,7 +139,7 @@ bool JCDNLD_DeInit()
     }
     else
     {
-        ALOGE("%s: NULL dwp channel", fn);
+        ALOGE("%s: NULL dwnld context", fn);
     }
     jd->finalize();
     /*TODO: inUse assignment should be with protection like using semaphore*/

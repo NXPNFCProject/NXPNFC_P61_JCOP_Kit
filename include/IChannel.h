@@ -70,6 +70,17 @@ bool (*transceive) (UINT8* xmitBuffer, INT32 xmitBufferSize, UINT8* recvBuffer,
 *******************************************************************************/
 
 void (*doeSE_Reset)();
+/*******************************************************************************
+**
+** Function:        doeSE_JcopDownLoadReset
+**
+** Description:     Power OFF and ON to eSE during JCOP Update
+**
+** Returns:         None.
+**
+*******************************************************************************/
+
+void (*doeSE_JcopDownLoadReset)();
 
 }IChannel_t;
 

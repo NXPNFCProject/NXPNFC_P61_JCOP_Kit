@@ -22,6 +22,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 JcopOsDwnld JcopOsDwnld::sJcopDwnld;
 INT32 gTransceiveTimeout = 120000;
@@ -39,6 +40,10 @@ tJBL_STATUS (JcopOsDwnld::*JcopOs_dwnld_seqhandler[])(
    };
 
 pJcopOs_Dwnld_Context_t gpJcopOs_Dwnld_Context = NULL;
+static const char *path[3] = {"/data/nfc/JcopOs_Update1.apdu",
+                             "/data/nfc/JcopOs_Update2.apdu",
+                             "/data/nfc/JcopOs_Update3.apdu"};
+
 /*******************************************************************************
 **
 ** Function:        getInstance
@@ -52,6 +57,32 @@ JcopOsDwnld* JcopOsDwnld::getInstance()
 {
     JcopOsDwnld *jd = new JcopOsDwnld();
     return jd;
+}
+
+/*******************************************************************************
+**
+** Function:        getJcopOsFileInfo
+**
+** Description:     Verify all the updater files required for download
+**                  are present or not
+**
+** Returns:         True if ok.
+**
+*******************************************************************************/
+bool JcopOsDwnld::getJcopOsFileInfo()
+{
+    static const char fn [] = "JcopOsDwnld::getJcopOsFileInfo";
+    bool status = true;
+    struct stat st;
+
+    for (int num = 0; num < 3; num++)
+    {
+        if (stat(path[num], &st))
+        {
+            status = false;
+        }
+    }
+    return status;
 }
 
 /*******************************************************************************
@@ -70,6 +101,11 @@ bool JcopOsDwnld::initialize (IChannel_t *channel)
 
     ALOGD ("%s: enter", fn);
 
+    if (!getJcopOsFileInfo())
+    {
+        ALOGD("%s: insufficient resources, file not present", fn);
+        return (false);
+    }
     gpJcopOs_Dwnld_Context = (pJcopOs_Dwnld_Context_t)malloc(sizeof(JcopOs_Dwnld_Context_t));
     if(gpJcopOs_Dwnld_Context != NULL)
     {
@@ -105,7 +141,6 @@ bool JcopOsDwnld::initialize (IChannel_t *channel)
     ALOGD ("%s: exit", fn);
     return (true);
 }
-
 /*******************************************************************************
 **
 ** Function:        finalize
@@ -267,8 +302,7 @@ tJBL_STATUS JcopOsDwnld::TriggerApdu(JcopOs_ImageInfo_t* pVersionInfo, tJBL_STAT
                ((pTranscv_Info->sRecvData[recvBufferActualSize-2] == 0x6F) &&
                (pTranscv_Info->sRecvData[recvBufferActualSize-1] == 0x00)))
         {
-            mchannel->doeSE_Reset();
-            usleep(2000*1000);
+            mchannel->doeSE_JcopDownLoadReset();
             status = STATUS_OK;
             ALOGD("%s: Trigger APDU Transceive status = 0x%X", fn, status);
         }
@@ -293,9 +327,6 @@ tJBL_STATUS JcopOsDwnld::TriggerApdu(JcopOs_ImageInfo_t* pVersionInfo, tJBL_STAT
 tJBL_STATUS JcopOsDwnld::GetInfo(JcopOs_ImageInfo_t* pImageInfo, tJBL_STATUS status, JcopOs_TranscieveInfo_t* pTranscv_Info)
 {
     static const char fn [] = "JcopOsDwnld::GetInfo";
-    static const char *path[3] = {"/data/nfc/JcopOs_Update1.apdu",
-                                 "/data/nfc/JcopOs_Update2.apdu",
-                                 "/data/nfc/JcopOs_Update3.apdu"};
 
     bool stat = false;
     IChannel_t *mchannel = gpJcopOs_Dwnld_Context->channel;
@@ -374,8 +405,7 @@ tJBL_STATUS JcopOsDwnld::GetInfo(JcopOs_ImageInfo_t* pImageInfo, tJBL_STATUS sta
     if (status == STATUS_FAILED)
     {
         ALOGD("%s; status failed, doing reset...", fn);
-        mchannel->doeSE_Reset();
-        usleep(2000*1000);
+        mchannel->doeSE_JcopDownLoadReset();
     }
     ALOGD("%s: exit; status = 0x%X", fn, status);
     return status;
@@ -522,8 +552,7 @@ tJBL_STATUS JcopOsDwnld::load_JcopOS_image(JcopOs_ImageInfo_t *Os_info, tJBL_STA
     }
 
 exit:
-    mchannel->doeSE_Reset();
-    usleep(2000*1000);
+    mchannel->doeSE_JcopDownLoadReset();
     ALOGE("%s close fp and exit; status= 0x%X", fn,status);
     wResult = fclose(Os_info->fp);
     return status;

@@ -90,6 +90,19 @@ public:
 *******************************************************************************/
 static JcopOsDwnld* getInstance ();
 
+
+/*******************************************************************************
+**
+** Function:        getJcopOsFileInfo
+**
+** Description:     Verify all the updater files required for download
+**                  are present or not
+**
+** Returns:         True if ok.
+**
+*******************************************************************************/
+bool getJcopOsFileInfo();
+
 /*******************************************************************************
 **
 ** Function:        initialize
