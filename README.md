@@ -16,3 +16,4 @@
 | android-6.0.1_r17                    |  3.5.0_M (PN553)   |  SEAccessKit_AR3.5.0_OpnSrc |
 | android-7.0.0_r4                     |  3.5.2 (PN553)   |  SEAccessKit_AR3.5.2_OpnSrc |
 | android-6.0.1_r17                    |  3.6.0_M (PN551/PN548C2)   |  SEAccessKit_AR3.6.0_OpnSrc |
+| android-7.0.0_r12                     |  7.1.0_N (PN548C2/PN551/PN553) |  NFC_NCIHALx_ARFC.7.1.0_N_OpnSrc |
