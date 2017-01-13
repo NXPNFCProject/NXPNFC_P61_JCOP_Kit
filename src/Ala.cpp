@@ -2356,15 +2356,31 @@ tJBL_STATUS Write_Response_To_OutFile(Ala_ImageInfo_t *image_info, UINT8* RecvDa
     }
     ALOGE("%s: Enter", fn);
 
+    /* |TAG | LEN(BERTLV)|                                VAL                         |
+     * | 61 |      XX    |  TAG | LEN |     VAL    | TAG | LEN(BERTLV) |      VAL     |
+     *                   |  43  | 1/2 | 7F21/60/40 | 44  | apduRespLen | apduResponse |
+     **/
     if(recvlen < 0x80)
     {
         tag44Len = 1;
         ucTag44[0] = recvlen;
         tag61Len = recvlen + 4 + tag43Len;
-        tagBuffer[1] = tag61Len;
-        tag43off = 2;
-        tag44off = 4+tag43Len;
-        tagLen = tag44off+2;
+
+        if(tag61Len&0x80)
+        {
+            tagBuffer[1] = 0x81;
+            tagBuffer[2] = tag61Len;
+            tag43off = 3;
+            tag44off = 5+tag43Len;
+            tagLen = tag44off+2;
+        }
+        else
+        {
+            tagBuffer[1] = tag61Len;
+            tag43off = 2;
+            tag44off = 4+tag43Len;
+            tagLen = tag44off+2;
+        }
     }
     else if((recvlen >= 0x80)&&(recvlen <= 0xFF))
     {
