@@ -19,3 +19,4 @@
 | android-7.0.0_r12                     |  7.0.3_N (PN548C2/PN551/PN553) |  SEAccessKit_AR7.0.3_OpnSrc |
 | android-7.0.0_r12                     |  7.1.0_N (PN553) |  SEAccessKit_AR7.1.0_OpnSrc |
 | android-7.0.0_r12                     |  7.2.0_N (PN553) |  SEAccessKit_AR7.2.0_OpnSrc |
+| android-7.1.1_r1                     |  7.3.0_N (PN548C2/PN551) |  SEAccessKit_AR7.3.0_OpnSrc |
