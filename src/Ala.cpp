@@ -22,34 +22,34 @@
 #include <stdlib.h>
 
 pAla_Dwnld_Context_t gpAla_Dwnld_Context=NULL;
-extern INT32 gTransceiveTimeout;
+extern int32_t gTransceiveTimeout;
 #ifdef JCOP3_WR
-UINT8 Cmd_Buffer[64*1024];
-static INT32 cmd_count = 0;
+uint8_t Cmd_Buffer[64*1024];
+static int32_t cmd_count = 0;
 bool islastcmdLoad;
 bool SendBack_cmds = false;
-UINT8 *pBuffer;
+uint8_t *pBuffer;
 #endif
-BOOLEAN mIsInit;
-UINT8 Select_Rsp[1024];
-UINT8 Jsbl_RefKey[256];
-UINT8 Jsbl_keylen;
+bool    mIsInit;
+uint8_t Select_Rsp[1024];
+uint8_t Jsbl_RefKey[256];
+uint8_t Jsbl_keylen;
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-UINT8 StoreData[22];
+uint8_t StoreData[22];
 #else
-UINT8 StoreData[34];
+uint8_t StoreData[34];
 #endif
 int Select_Rsp_Len;
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-UINT8 lsVersionArr[2];
-UINT8 tag42Arr[17];
-UINT8 tag45Arr[9];
-UINT8 lsExecuteResp[4];
-UINT8 AID_ARRAY[22];
-INT32 resp_len = 0;
+uint8_t lsVersionArr[2];
+uint8_t tag42Arr[17];
+uint8_t tag45Arr[9];
+uint8_t lsExecuteResp[4];
+uint8_t AID_ARRAY[22];
+int32_t resp_len = 0;
 FILE *fAID_MEM = NULL;
 FILE *fLS_STATUS = NULL;
-UINT8 lsGetStatusArr[2];
+uint8_t lsGetStatusArr[2];
 tJBL_STATUS (*ls_GetStatus_seqhandler[])(Ala_ImageInfo_t *pContext, tJBL_STATUS status, Ala_TranscieveInfo_t *pInfo)=
 {
     ALA_OpenChannel,
@@ -87,7 +87,7 @@ tJBL_STATUS (*Jsblcer_id_seqhandler[])(Ala_ImageInfo_t *pContext, tJBL_STATUS st
 ** Returns:         True if ok.
 **
 *******************************************************************************/
-BOOLEAN initialize (IChannel_t* channel)
+bool initialize (IChannel_t* channel)
 {
     static const char fn [] = "Ala_initialize";
 
@@ -96,12 +96,12 @@ BOOLEAN initialize (IChannel_t* channel)
     gpAla_Dwnld_Context = (pAla_Dwnld_Context_t)malloc(sizeof(Ala_Dwnld_Context_t));
     if(gpAla_Dwnld_Context != NULL)
     {
-        memset((void *)gpAla_Dwnld_Context, 0, (UINT32)sizeof(Ala_Dwnld_Context_t));
+        memset((void *)gpAla_Dwnld_Context, 0, (uint32_t)sizeof(Ala_Dwnld_Context_t));
     }
     else
     {
         ALOGD("%s: Memory allocation failed", fn);
-        return (FALSE);
+        return (false);
     }
     gpAla_Dwnld_Context->mchannel = channel;
 
@@ -122,8 +122,8 @@ BOOLEAN initialize (IChannel_t* channel)
     else
     {
         /*Change is required aidLen = 0x00*/
-        UINT8 aidLen = 0x00;
-        INT32 wStatus = 0;
+        uint8_t aidLen = 0x00;
+        int32_t wStatus = 0;
 
     while(!(feof(fAID_MEM)))
     {
@@ -133,7 +133,7 @@ BOOLEAN initialize (IChannel_t* channel)
         {
             ALOGE ("%s: exit: Error during read AID data", fn);
             fclose(fAID_MEM);
-            return FALSE;
+            return false;
         }
     }
     ArrayOfAIDs[2][0] = aidLen - 1;
@@ -147,9 +147,9 @@ BOOLEAN initialize (IChannel_t* channel)
 #ifdef JCOP3_WR
     pBuffer = Cmd_Buffer;
 #endif
-    mIsInit = TRUE;
+    mIsInit = true;
     ALOGD ("%s: exit", fn);
-    return (TRUE);
+    return (true);
 }
 
 
@@ -166,7 +166,7 @@ void finalize ()
 {
     static const char fn [] = "Ala_finalize";
     ALOGD ("%s: enter", fn);
-    mIsInit       = FALSE;
+    mIsInit       = false;
     if(gpAla_Dwnld_Context != NULL)
     {
         gpAla_Dwnld_Context->mchannel = NULL;
@@ -186,10 +186,10 @@ void finalize ()
 **
 *******************************************************************************/
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-tJBL_STATUS Perform_ALA(const char *name,const char *dest, const UINT8 *pdata,
-UINT16 len, UINT8 *respSW)
+tJBL_STATUS Perform_ALA(const char *name,const char *dest, const uint8_t *pdata,
+uint16_t len, uint8_t *respSW)
 #else
-tJBL_STATUS Perform_ALA(const char *name, const UINT8 *pdata, UINT16 len)
+tJBL_STATUS Perform_ALA(const char *name, const uint8_t *pdata, uint16_t len)
 #endif
 {
     static const char fn [] = "Perform_ALA";
@@ -241,7 +241,7 @@ tJBL_STATUS Perform_ALA(const char *name, const UINT8 *pdata, UINT16 len)
 ** Returns:         Success if ok.
 **
 *******************************************************************************/
-tJBL_STATUS GetJsbl_Certificate_Refkey(UINT8 *pKey, INT32 *pKeylen)
+tJBL_STATUS GetJsbl_Certificate_Refkey(uint8_t *pKey, int32_t *pKeylen)
 {
     static const char fn [] = "GetJsbl_Certificate_ID";
     tJBL_STATUS status = STATUS_FAILED;
@@ -259,7 +259,7 @@ tJBL_STATUS GetJsbl_Certificate_Refkey(UINT8 *pKey, INT32 *pKeylen)
         {
             if(Jsbl_keylen != 0x00)
             {
-                *pKeylen = (INT32)Jsbl_keylen;
+                *pKeylen = (int32_t)Jsbl_keylen;
                 memcpy(pKey, Jsbl_RefKey, Jsbl_keylen);
                 Jsbl_keylen = 0;
             }
@@ -282,7 +282,7 @@ tJBL_STATUS GetJsbl_Certificate_Refkey(UINT8 *pKey, INT32 *pKeylen)
 tJBL_STATUS JsblCerId_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo))
 {
     static const char fn[] = "JsblCerId_seq_handler";
-    UINT16 seq_counter = 0;
+    uint16_t seq_counter = 0;
     Ala_ImageInfo_t update_info = (Ala_ImageInfo_t )gpAla_Dwnld_Context->Image_info;
     Ala_TranscieveInfo_t trans_info = (Ala_TranscieveInfo_t )gpAla_Dwnld_Context->Transcv_Info;
     tJBL_STATUS status = STATUS_FAILED;
@@ -314,7 +314,7 @@ tJBL_STATUS JsblCerId_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t* 
 ** Returns:         Success if ok.
 **
 *******************************************************************************/
-tJBL_STATUS GetLs_Version(UINT8 *pVersion)
+tJBL_STATUS GetLs_Version(uint8_t *pVersion)
 {
     static const char fn [] = "GetLs_Version";
     tJBL_STATUS status = STATUS_FAILED;
@@ -348,7 +348,7 @@ tJBL_STATUS GetLs_Version(UINT8 *pVersion)
 ** Returns:         Success if ok.
 **
 *******************************************************************************/
-tJBL_STATUS Get_LsAppletStatus(UINT8 *pVersion)
+tJBL_STATUS Get_LsAppletStatus(uint8_t *pVersion)
 {
     static const char fn [] = "GetLs_Version";
     tJBL_STATUS status = STATUS_FAILED;
@@ -386,7 +386,7 @@ tJBL_STATUS GetVer_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t*
         pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo))
 {
     static const char fn[] = "GetVer_seq_handler";
-    UINT16 seq_counter = 0;
+    uint16_t seq_counter = 0;
     Ala_ImageInfo_t update_info = (Ala_ImageInfo_t )gpAla_Dwnld_Context->Image_info;
     Ala_TranscieveInfo_t trans_info = (Ala_TranscieveInfo_t )gpAla_Dwnld_Context->Transcv_Info;
     tJBL_STATUS status = STATUS_FAILED;
@@ -421,7 +421,7 @@ tJBL_STATUS GetLsStatus_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t
         pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo))
 {
     static const char fn[] = "ls_GetStatus_seqhandler";
-    UINT16 seq_counter = 0;
+    uint16_t seq_counter = 0;
     Ala_ImageInfo_t update_info = (Ala_ImageInfo_t )gpAla_Dwnld_Context->Image_info;
     Ala_TranscieveInfo_t trans_info = (Ala_TranscieveInfo_t )gpAla_Dwnld_Context->Transcv_Info;
     tJBL_STATUS status = STATUS_FAILED;
@@ -462,7 +462,7 @@ tJBL_STATUS ALA_update_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t*
 {
     static const char fn[] = "ALA_update_seq_handler";
     static const char Ala_path[] = APPLET_PATH;
-    UINT16 seq_counter = 0;
+    uint16_t seq_counter = 0;
     Ala_ImageInfo_t update_info = (Ala_ImageInfo_t )gpAla_Dwnld_Context->
         Image_info;
     Ala_TranscieveInfo_t trans_info = (Ala_TranscieveInfo_t )gpAla_Dwnld_Context
@@ -481,9 +481,9 @@ tJBL_STATUS ALA_update_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t*
     {
         update_info.bytes_wrote = 0x55;
     }
-    if((ALA_UpdateExeStatus(LS_DEFAULT_STATUS))!= TRUE)
+    if((ALA_UpdateExeStatus(LS_DEFAULT_STATUS))!= true)
     {
-        return FALSE;
+        return false;
     }
 #endif
     //memcpy(update_info.fls_path, (char*)Ala_path, sizeof(Ala_path));
@@ -522,7 +522,7 @@ tJBL_STATUS ALA_OpenChannel(Ala_ImageInfo_t *Os_info, tJBL_STATUS status,
 {
     static const char fn[] = "ALA_OpenChannel";
     bool stat = false;
-    INT32 recvBufferActualSize = 0;
+    int32_t recvBufferActualSize = 0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
     Os_info->channel_cnt = 0x00;
     ALOGD("%s: enter", fn);
@@ -534,8 +534,8 @@ tJBL_STATUS ALA_OpenChannel(Ala_ImageInfo_t *Os_info, tJBL_STATUS status,
     else
     {
         pTranscv_Info->timeout = gTransceiveTimeout;
-        pTranscv_Info->sSendlength = (INT32)sizeof(OpenChannel);
-        pTranscv_Info->sRecvlength = 1024;//(INT32)sizeof(INT32);
+        pTranscv_Info->sSendlength = (int32_t)sizeof(OpenChannel);
+        pTranscv_Info->sRecvlength = 1024;//(int32_t)sizeof(int32_t);
         memcpy(pTranscv_Info->sSendData, OpenChannel, pTranscv_Info->sSendlength);
 
         ALOGD("%s: Calling Secure Element Transceive", fn);
@@ -545,7 +545,7 @@ tJBL_STATUS ALA_OpenChannel(Ala_ImageInfo_t *Os_info, tJBL_STATUS status,
                                 pTranscv_Info->sRecvlength,
                                 recvBufferActualSize,
                                 pTranscv_Info->timeout);
-        if(stat != TRUE &&
+        if(stat != true &&
            (recvBufferActualSize < 0x03))
         {
 #if(NXP_LDR_SVC_VER_2 == TRUE)
@@ -568,7 +568,7 @@ tJBL_STATUS ALA_OpenChannel(Ala_ImageInfo_t *Os_info, tJBL_STATUS status,
         }
         else
         {
-            UINT8 cnt = Os_info->channel_cnt;
+            uint8_t cnt = Os_info->channel_cnt;
             Os_info->Channel_Info[cnt].channel_id = pTranscv_Info->sRecvData[recvBufferActualSize-3];
             Os_info->Channel_Info[cnt].isOpend = true;
             Os_info->channel_cnt++;
@@ -592,10 +592,10 @@ tJBL_STATUS ALA_SelectAla(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
 {
     static const char fn[] = "ALA_SelectAla";
     bool stat = false;
-    INT32 recvBufferActualSize = 0;
+    int32_t recvBufferActualSize = 0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-    UINT8 selectCnt = 3;
+    uint8_t selectCnt = 3;
 #endif
     ALOGD("%s: enter", fn);
 
@@ -608,15 +608,15 @@ tJBL_STATUS ALA_SelectAla(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
     {
         pTranscv_Info->sSendData[0] = Os_info->Channel_Info[0].channel_id;
         pTranscv_Info->timeout = gTransceiveTimeout;
-        pTranscv_Info->sSendlength = (INT32)sizeof(SelectAla);
-        pTranscv_Info->sRecvlength = 1024;//(INT32)sizeof(INT32);
+        pTranscv_Info->sSendlength = (int32_t)sizeof(SelectAla);
+        pTranscv_Info->sRecvlength = 1024;//(int32_t)sizeof(int32_t);
 
 #if(NXP_LDR_SVC_VER_2 == TRUE)
     while((selectCnt--) > 0)
     {
         memcpy(&(pTranscv_Info->sSendData[1]), &ArrayOfAIDs[selectCnt][2],
                 ((ArrayOfAIDs[selectCnt][0])-1));
-        pTranscv_Info->sSendlength = (INT32)ArrayOfAIDs[selectCnt][0];
+        pTranscv_Info->sSendlength = (int32_t)ArrayOfAIDs[selectCnt][0];
         /*If NFC/SPI Deinitialize requested*/
 #else
         memcpy(&(pTranscv_Info->sSendData[1]), &SelectAla[1], sizeof(SelectAla)-1);
@@ -629,7 +629,7 @@ tJBL_STATUS ALA_SelectAla(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
                                 pTranscv_Info->sRecvlength,
                                 recvBufferActualSize,
                                 pTranscv_Info->timeout);
-        if(stat != TRUE &&
+        if(stat != true &&
            (recvBufferActualSize == 0x00))
         {
             status = STATUS_FAILED;
@@ -650,9 +650,9 @@ tJBL_STATUS ALA_SelectAla(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
            /*If AID is found which is successfully selected break while loop*/
            if(status == STATUS_OK)
            {
-               UINT8 totalLen = ArrayOfAIDs[selectCnt][0];
-               UINT8 cnt  = 0;
-               INT32 wStatus= 0;
+               uint8_t totalLen = ArrayOfAIDs[selectCnt][0];
+               uint8_t cnt  = 0;
+               int32_t wStatus= 0;
                status = STATUS_FAILED;
 
                fAID_MEM = fopen(AID_MEM_PATH,"w+");
@@ -715,8 +715,8 @@ tJBL_STATUS ALA_StoreData(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
 {
     static const char fn[] = "ALA_StoreData";
     bool stat = false;
-    INT32 recvBufferActualSize = 0;
-    INT32 xx=0, len = 0;
+    int32_t recvBufferActualSize = 0;
+    int32_t xx=0, len = 0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
     ALOGD("%s: enter", fn);
     if(Os_info == NULL ||
@@ -734,7 +734,7 @@ tJBL_STATUS ALA_StoreData(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
         pTranscv_Info->sSendData[xx++] = len;
         memcpy(&(pTranscv_Info->sSendData[xx]), StoreData, len);
         pTranscv_Info->timeout = gTransceiveTimeout;
-        pTranscv_Info->sSendlength = (INT32)(xx + sizeof(StoreData));
+        pTranscv_Info->sSendlength = (int32_t)(xx + sizeof(StoreData));
         pTranscv_Info->sRecvlength = 1024;
 
         ALOGD("%s: Calling Secure Element Transceive", fn);
@@ -744,7 +744,7 @@ tJBL_STATUS ALA_StoreData(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
                                 pTranscv_Info->sRecvlength,
                                 recvBufferActualSize,
                                 pTranscv_Info->timeout);
-        if((stat != TRUE) &&
+        if((stat != true) &&
            (recvBufferActualSize == 0x00))
         {
             status = STATUS_FAILED;
@@ -782,17 +782,17 @@ tJBL_STATUS ALA_StoreData(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
 tJBL_STATUS ALA_loadapplet(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info)
 {
     static const char fn [] = "ALA_loadapplet";
-    BOOLEAN stat = FALSE;
+    bool    stat = false;
     int wResult, size =0;
-    INT32 wIndex,wCount=0;
-    INT32 wLen = 0;
-    INT32 recvBufferActualSize = 0;
-    UINT8 temp_buf[1024];
-    UINT8 len_byte=0, offset =0;
+    int32_t wIndex,wCount=0;
+    int32_t wLen = 0;
+    int32_t recvBufferActualSize = 0;
+    uint8_t temp_buf[1024];
+    uint8_t len_byte=0, offset =0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
     Os_info->bytes_read = 0;
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-    BOOLEAN reachEOFCheck = FALSE;
+    bool    reachEOFCheck = false;
     tJBL_STATUS tag40_found = STATUS_FAILED;
     if(Os_info->bytes_wrote == 0xAA)
     {
@@ -873,7 +873,7 @@ tJBL_STATUS ALA_loadapplet(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tra
         else if(status == STATUS_OK)
         {
             /*Reset the flag in case further commands exists*/
-            reachEOFCheck = FALSE;
+            reachEOFCheck = false;
         }
 #endif
         if(temp_buf[offset] == TAG_ALA_CMD_ID)
@@ -940,7 +940,7 @@ tJBL_STATUS ALA_loadapplet(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tra
                                 tag40_found = STATUS_OK;
                                 lsExecuteResp[2] = 0x90;
                                 lsExecuteResp[3] = 0x00;
-                                reachEOFCheck = TRUE;
+                                reachEOFCheck = true;
                                 continue;
                             }
                             ALOGE("Post Switching LS store data failure");
@@ -1036,7 +1036,7 @@ exit:
         fclose(Os_info->fResp);
     }
     /*Script ends with SW 6320 and reached END OF FILE*/
-    if(reachEOFCheck == TRUE)
+    if(reachEOFCheck == true)
     {
        status = STATUS_OK;
        ALA_UpdateExeStatus(LS_SUCCESS_STATUS);
@@ -1057,27 +1057,27 @@ exit:
 *******************************************************************************/
 #if(NXP_LDR_SVC_VER_2 == TRUE)
 tJBL_STATUS ALA_Check_KeyIdentifier(Ala_ImageInfo_t *Os_info, tJBL_STATUS status,
-   Ala_TranscieveInfo_t *pTranscv_Info, UINT8* temp_buf, tJBL_STATUS flag,
-   INT32 wNewLen)
+   Ala_TranscieveInfo_t *pTranscv_Info, uint8_t* temp_buf, tJBL_STATUS flag,
+   int32_t wNewLen)
 #else
 tJBL_STATUS ALA_Check_KeyIdentifier(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info)
 #endif
 {
     static const char fn[] = "ALA_Check_KeyIdentifier";
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-    UINT16 offset = 0x00, len_byte=0;
+    uint16_t offset = 0x00, len_byte=0;
 #else
-    UINT8 offset = 0x00, len_byte=0;
+    uint8_t offset = 0x00, len_byte=0;
 #endif
     tJBL_STATUS key_found = STATUS_FAILED;
     status = STATUS_FAILED;
-    UINT8 read_buf[1024];
+    uint8_t read_buf[1024];
     bool stat = false;
-    INT32 wLen, recvBufferActualSize=0;
+    int32_t wLen, recvBufferActualSize=0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-    UINT8 certf_found = STATUS_FAILED;
-    UINT8 sign_found = STATUS_FAILED;
+    uint8_t certf_found = STATUS_FAILED;
+    uint8_t sign_found = STATUS_FAILED;
 #endif
     ALOGD("%s: enter", fn);
 
@@ -1302,14 +1302,14 @@ tJBL_STATUS ALA_Check_KeyIdentifier(Ala_ImageInfo_t *Os_info, tJBL_STATUS status
 ** Returns:         Success if ok.
 **
 *******************************************************************************/
-tJBL_STATUS ALA_ReadScript(Ala_ImageInfo_t *Os_info, UINT8 *read_buf)
+tJBL_STATUS ALA_ReadScript(Ala_ImageInfo_t *Os_info, uint8_t *read_buf)
 {
     static const char fn[]="ALA_ReadScript";
-    INT32 wCount, wLen, wIndex = 0;
-    UINT8 len_byte = 0;
+    int32_t wCount, wLen, wIndex = 0;
+    uint8_t len_byte = 0;
     int wResult = 0;
     tJBL_STATUS status = STATUS_FAILED;
-    INT32 lenOff = 1;
+    int32_t lenOff = 1;
 
     ALOGD("%s: enter", fn);
 
@@ -1450,9 +1450,9 @@ tJBL_STATUS ALA_SendtoEse(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
 {
     static const char fn [] = "ALA_SendtoEse";
     bool stat =false, chanl_open_cmd = false;
-    UINT8 xx=0;
+    uint8_t xx=0;
     status = STATUS_FAILED;
-    INT32 recvBufferActualSize=0, recv_len = 0;
+    int32_t recvBufferActualSize=0, recv_len = 0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
     ALOGD("%s: enter", fn);
 #ifdef JCOP3_WR
@@ -1473,7 +1473,7 @@ tJBL_STATUS ALA_SendtoEse(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
             else
             {
                 ALOGE("Channel close");
-                for(UINT8 cnt=0; cnt < Os_info->channel_cnt; cnt++)
+                for(uint8_t cnt=0; cnt < Os_info->channel_cnt; cnt++)
                 {
                     if(Os_info->Channel_Info[cnt].channel_id == pTranscv_Info->sSendData[3])
                     {
@@ -1491,7 +1491,7 @@ tJBL_STATUS ALA_SendtoEse(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
                                     pTranscv_Info->sRecvlength,
                                     recvBufferActualSize,
                                     pTranscv_Info->timeout);
-        if(stat != TRUE)
+        if(stat != true)
         {
             ALOGE("%s: Transceive failed; status=0x%X", fn, stat);
         }
@@ -1504,7 +1504,7 @@ tJBL_STATUS ALA_SendtoEse(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
                     (pTranscv_Info->sRecvData[recvBufferActualSize-1] == 0x00)))
                 {
                     ALOGE("open channel success");
-                    UINT8 cnt = Os_info->channel_cnt;
+                    uint8_t cnt = Os_info->channel_cnt;
                     Os_info->Channel_Info[cnt].channel_id = pTranscv_Info->sRecvData[recvBufferActualSize-3];
                     Os_info->Channel_Info[cnt].isOpend = true;
                     Os_info->channel_cnt++;
@@ -1571,7 +1571,7 @@ tJBL_STATUS ALA_SendtoAla(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
     static const char fn [] = "ALA_SendtoAla";
     bool stat =false;
     status = STATUS_FAILED;
-    INT32 recvBufferActualSize = 0;
+    int32_t recvBufferActualSize = 0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
     ALOGD("%s: enter", fn);
 #if(NXP_LDR_SVC_VER_2 == TRUE)
@@ -1588,7 +1588,7 @@ tJBL_STATUS ALA_SendtoAla(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
                                 pTranscv_Info->sRecvlength,
                                 recvBufferActualSize,
                                 pTranscv_Info->timeout);
-    if(stat != TRUE)
+    if(stat != true)
     {
         ALOGE("%s: Transceive failed; status=0x%X", fn, stat);
     }
@@ -1617,10 +1617,10 @@ tJBL_STATUS ALA_CloseChannel(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_T
     static const char fn [] = "ALA_CloseChannel";
     status = STATUS_FAILED;
     bool stat = false;
-    UINT8 xx =0;
-    INT32 recvBufferActualSize = 0;
+    uint8_t xx =0;
+    int32_t recvBufferActualSize = 0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
-    UINT8 cnt = 0;
+    uint8_t cnt = 0;
     ALOGD("%s: enter",fn);
 
     if(Os_info == NULL ||
@@ -1649,7 +1649,7 @@ tJBL_STATUS ALA_CloseChannel(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_T
                                         pTranscv_Info->sRecvlength,
                                         recvBufferActualSize,
                                         pTranscv_Info->timeout);
-            if(stat != TRUE &&
+            if(stat != true &&
                recvBufferActualSize < 2)
             {
                 ALOGE("%s: Transceive failed; status=0x%X", fn, stat);
@@ -1680,16 +1680,16 @@ tJBL_STATUS ALA_CloseChannel(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_T
 **
 *******************************************************************************/
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-tJBL_STATUS ALA_ProcessResp(Ala_ImageInfo_t *image_info, INT32 recvlen, Ala_TranscieveInfo_t *trans_info, Ls_TagType tType)
+tJBL_STATUS ALA_ProcessResp(Ala_ImageInfo_t *image_info, int32_t recvlen, Ala_TranscieveInfo_t *trans_info, Ls_TagType tType)
 #else
-tJBL_STATUS ALA_ProcessResp(Ala_ImageInfo_t *image_info, INT32 recvlen, Ala_TranscieveInfo_t *trans_info)
+tJBL_STATUS ALA_ProcessResp(Ala_ImageInfo_t *image_info, int32_t recvlen, Ala_TranscieveInfo_t *trans_info)
 #endif
 {
     static const char fn [] = "ALA_ProcessResp";
     tJBL_STATUS status = STATUS_FAILED;
-    static INT32 temp_len = 0;
-    UINT8* RecvData = trans_info->sRecvData;
-    UINT8 xx =0;
+    static int32_t temp_len = 0;
+    uint8_t* RecvData = trans_info->sRecvData;
+    uint8_t xx =0;
     char sw[2];
 
     ALOGD("%s: enter", fn);
@@ -1798,8 +1798,8 @@ tJBL_STATUS ALA_ProcessResp(Ala_ImageInfo_t *image_info, INT32 recvlen, Ala_Tran
             (sw[0] == 0x63) &&
             (sw[1] == 0x20))
     {
-        UINT8 respLen = 0;
-        INT32 wStatus = 0;
+        uint8_t respLen = 0;
+        int32_t wStatus = 0;
 
         AID_ARRAY[0] = recvlen+3;
         AID_ARRAY[1] = 00;
@@ -1860,11 +1860,11 @@ tJBL_STATUS ALA_ProcessResp(Ala_ImageInfo_t *image_info, INT32 recvlen, Ala_Tran
 ** Returns:         Success if ok.
 **
 *******************************************************************************/
-tJBL_STATUS Process_EseResponse(Ala_TranscieveInfo_t *pTranscv_Info, INT32 recv_len, Ala_ImageInfo_t *Os_info)
+tJBL_STATUS Process_EseResponse(Ala_TranscieveInfo_t *pTranscv_Info, int32_t recv_len, Ala_ImageInfo_t *Os_info)
 {
     static const char fn[] = "Process_EseResponse";
     tJBL_STATUS status = STATUS_OK;
-    UINT8 xx = 0;
+    uint8_t xx = 0;
     ALOGD("%s: enter", fn);
 
     pTranscv_Info->sSendData[xx++] = (CLA_BYTE | Os_info->Channel_Info[0].channel_id);
@@ -1881,7 +1881,7 @@ tJBL_STATUS Process_EseResponse(Ala_TranscieveInfo_t *pTranscv_Info, INT32 recv_
         pTranscv_Info->sSendData[xx++] = ONLY_BLOCK;
 #endif
         pTranscv_Info->sSendData[xx++] = 0x00;
-        pTranscv_Info->sSendData[xx++] = (UINT8)recv_len;
+        pTranscv_Info->sSendData[xx++] = (uint8_t)recv_len;
         memcpy(&(pTranscv_Info->sSendData[xx]),pTranscv_Info->sRecvData,recv_len);
         pTranscv_Info->sSendlength = xx+ recv_len;
 #if(NXP_LDR_SVC_VER_2)
@@ -1942,7 +1942,7 @@ tJBL_STATUS Process_EseResponse(Ala_TranscieveInfo_t *pTranscv_Info, INT32 recv_
 ** Returns:         Success if ok.
 **
 *******************************************************************************/
-tJBL_STATUS Process_SelectRsp(UINT8* Recv_data, INT32 Recv_len)
+tJBL_STATUS Process_SelectRsp(uint8_t* Recv_data, int32_t Recv_len)
 {
     static const char fn[]="Process_SelectRsp";
     tJBL_STATUS status = STATUS_FAILED;
@@ -1965,7 +1965,7 @@ tJBL_STATUS Process_SelectRsp(UINT8* Recv_data, INT32 Recv_len)
             //points to TAG 9F08 for LS application version
             if((Recv_data[i] == TAG_LS_VER1)&&(Recv_data[i+1] == TAG_LS_VER2))
             {
-                UINT8 lsaVersionLen = 0;
+                uint8_t lsaVersionLen = 0;
                 ALOGD("TAG: TAG_LS_APPLICATION_VER");
 
                 i = i+2;
@@ -1979,14 +1979,14 @@ tJBL_STATUS Process_SelectRsp(UINT8* Recv_data, INT32 Recv_len)
 
                 if(Recv_data[i] == TAG_RE_KEYID)
                 {
-                    UINT8 rootEntityLen = 0;
+                    uint8_t rootEntityLen = 0;
                     i = i+1;
                     rootEntityLen = Recv_data[i];
 
                     i = i+1;
                     if(Recv_data[i] == TAG_LSRE_ID)
                     {
-                        UINT8 tag42Len = 0;
+                        uint8_t tag42Len = 0;
                         i = i+1;
                         tag42Len = Recv_data[i];
                         //copy the data including length
@@ -1995,7 +1995,7 @@ tJBL_STATUS Process_SelectRsp(UINT8* Recv_data, INT32 Recv_len)
 
                         if(Recv_data[i] == TAG_LSRE_SIGNID)
                         {
-                            UINT8 tag45Len = Recv_data[i+1];
+                            uint8_t tag45Len = Recv_data[i+1];
                             memcpy(tag45Arr, &Recv_data[i+1],tag45Len+1);
                             status = STATUS_OK;
                         }
@@ -2096,7 +2096,7 @@ tJBL_STATUS Process_SelectRsp(UINT8* Recv_data, INT32 Recv_len)
 tJBL_STATUS Bufferize_load_cmds(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info)
 {
     static const char fn[] = "Bufferize_load_cmds";
-    UINT8 Param_P2;
+    uint8_t Param_P2;
     status = STATUS_FAILED;
 
     if(cmd_count == 0x00)
@@ -2165,9 +2165,9 @@ tJBL_STATUS Send_Backall_Loadcmds(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
 {
     static const char fn [] = "Send_Backall_Loadcmds";
     bool stat =false;
-    UINT8 xx=0;
+    uint8_t xx=0;
     status = STATUS_FAILED;
-    INT32 recvBufferActualSize=0, recv_len = 0;
+    int32_t recvBufferActualSize=0, recv_len = 0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
     ALOGD("%s: enter", fn);
     pBuffer = Cmd_Buffer; // Points to start of first cmd to send
@@ -2190,7 +2190,7 @@ tJBL_STATUS Send_Backall_Loadcmds(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
                                         recvBufferActualSize,
                                         pTranscv_Info->timeout);
 
-            if(stat != TRUE ||
+            if(stat != true ||
                (recvBufferActualSize < 2))
             {
                 ALOGE("%s: Transceive failed; status=0x%X", fn, stat);
@@ -2260,11 +2260,11 @@ tJBL_STATUS Send_Backall_Loadcmds(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
 ** Returns:         Number of Length bytes
 **
 *******************************************************************************/
-UINT8 Numof_lengthbytes(UINT8 *read_buf, INT32 *pLen)
+uint8_t Numof_lengthbytes(uint8_t *read_buf, int32_t *pLen)
 {
     static const char fn[]= "Numof_lengthbytes";
-    UINT8 len_byte=0, i=0;
-    INT32 wLen = 0;
+    uint8_t len_byte=0, i=0;
+    int32_t wLen = 0;
     ALOGE("%s:enter", fn);
 
     if(read_buf[i] == 0x00)
@@ -2328,22 +2328,22 @@ UINT8 Numof_lengthbytes(UINT8 *read_buf, INT32 *pLen)
 ** Returns:         Success if OK
 **
 *******************************************************************************/
-tJBL_STATUS Write_Response_To_OutFile(Ala_ImageInfo_t *image_info, UINT8* RecvData,
-    INT32 recvlen, Ls_TagType tType)
+tJBL_STATUS Write_Response_To_OutFile(Ala_ImageInfo_t *image_info, uint8_t* RecvData,
+    int32_t recvlen, Ls_TagType tType)
 {
-    INT32 respLen       = 0;
+    int32_t respLen       = 0;
     tJBL_STATUS wStatus = STATUS_FAILED;
     static const char fn [] = "Write_Response_to_OutFile";
-    INT32 status = 0;
-    UINT8 tagBuffer[12] = {0x61,0,0,0,0,0,0,0,0,0,0,0};
-    INT32 tag44Len = 0;
-    INT32 tag61Len = 0;
-    UINT8 tag43Len = 1;
-    UINT8 tag43off = 0;
-    UINT8 tag44off = 0;
-    UINT8 ucTag44[3] = {0x00,0x00,0x00};
-    UINT8 tagLen = 0;
-    UINT8 tempLen = 0;
+    int32_t status = 0;
+    uint8_t tagBuffer[12] = {0x61,0,0,0,0,0,0,0,0,0,0,0};
+    int32_t tag44Len = 0;
+    int32_t tag61Len = 0;
+    uint8_t tag43Len = 1;
+    uint8_t tag43off = 0;
+    uint8_t tag44off = 0;
+    uint8_t ucTag44[3] = {0x00,0x00,0x00};
+    uint8_t tagLen = 0;
+    uint8_t tempLen = 0;
     /*If the Response out file is NULL or Other than LS commands*/
     if((image_info->bytes_wrote == 0x55)||(tType == LS_Default))
     {
@@ -2489,12 +2489,12 @@ tJBL_STATUS Write_Response_To_OutFile(Ala_ImageInfo_t *image_info, UINT8* RecvDa
 ** Returns:         Success if Tag found
 **
 *******************************************************************************/
-tJBL_STATUS Check_Certificate_Tag(UINT8 *read_buf, UINT16 *offset1)
+tJBL_STATUS Check_Certificate_Tag(uint8_t *read_buf, uint16_t *offset1)
 {
     tJBL_STATUS status = STATUS_FAILED;
-    UINT16 len_byte = 0;
-    INT32 wLen, recvBufferActualSize=0;
-    UINT16 offset = *offset1;
+    uint16_t len_byte = 0;
+    int32_t wLen, recvBufferActualSize=0;
+    uint16_t offset = *offset1;
 
     if(((read_buf[offset]<<8|read_buf[offset+1]) == TAG_CERTIFICATE))
     {
@@ -2519,16 +2519,16 @@ tJBL_STATUS Check_Certificate_Tag(UINT8 *read_buf, UINT16 *offset1)
 ** Returns:         Success if Tag found
 **
 *******************************************************************************/
-tJBL_STATUS Check_SerialNo_Tag(UINT8 *read_buf, UINT16 *offset1)
+tJBL_STATUS Check_SerialNo_Tag(uint8_t *read_buf, uint16_t *offset1)
 {
     tJBL_STATUS status = STATUS_FAILED;
-    UINT16 offset = *offset1;
+    uint16_t offset = *offset1;
     static const char fn[] = "Check_SerialNo_Tag";
 
     if((read_buf[offset] == TAG_SERIAL_NO))
     {
         ALOGD("TAGID: TAG_SERIAL_NO");
-        UINT8 serNoLen = read_buf[offset+1];
+        uint8_t serNoLen = read_buf[offset+1];
         offset = offset + serNoLen + 2;
         *offset1 = offset;
         ALOGD("%s: TAG_LSROOT_ENTITY is %x", fn, read_buf[offset]);
@@ -2547,17 +2547,17 @@ tJBL_STATUS Check_SerialNo_Tag(UINT8 *read_buf, UINT16 *offset1)
 ** Returns:         Success if Tag found
 **
 *******************************************************************************/
-tJBL_STATUS Check_LSRootID_Tag(UINT8 *read_buf, UINT16 *offset1)
+tJBL_STATUS Check_LSRootID_Tag(uint8_t *read_buf, uint16_t *offset1)
 {
     tJBL_STATUS status = STATUS_FAILED;
-    UINT16 offset      = *offset1;
+    uint16_t offset      = *offset1;
 
     if(read_buf[offset] == TAG_LSRE_ID)
     {
         ALOGD("TAGID: TAG_LSROOT_ENTITY");
         if(tag42Arr[0] == read_buf[offset+1])
         {
-            UINT8 tag42Len = read_buf[offset+1];
+            uint8_t tag42Len = read_buf[offset+1];
             offset = offset+2;
             status = memcmp(&read_buf[offset],&tag42Arr[1],tag42Arr[0]);
             ALOGD("ALA_Check_KeyIdentifier : TAG 42 verified");
@@ -2583,20 +2583,20 @@ tJBL_STATUS Check_LSRootID_Tag(UINT8 *read_buf, UINT16 *offset1)
 ** Returns:         Success if Tag found
 **
 *******************************************************************************/
-tJBL_STATUS Check_CertHoldID_Tag(UINT8 *read_buf, UINT16 *offset1)
+tJBL_STATUS Check_CertHoldID_Tag(uint8_t *read_buf, uint16_t *offset1)
 {
     tJBL_STATUS status = STATUS_FAILED;
-    UINT16 offset      = *offset1;
+    uint16_t offset      = *offset1;
 
     if((read_buf[offset]<<8|read_buf[offset+1]) == TAG_CERTFHOLD_ID)
     {
-        UINT8 certfHoldIDLen = 0;
+        uint8_t certfHoldIDLen = 0;
         ALOGD("TAGID: TAG_CERTFHOLD_ID");
         certfHoldIDLen = read_buf[offset+2];
         offset = offset+certfHoldIDLen+3;
         if(read_buf[offset] == TAG_KEY_USAGE)
         {
-            UINT8 keyusgLen = 0;
+            uint8_t keyusgLen = 0;
             ALOGD("TAGID: TAG_KEY_USAGE");
             keyusgLen = read_buf[offset+1];
             offset = offset+keyusgLen+2;
@@ -2616,19 +2616,19 @@ tJBL_STATUS Check_CertHoldID_Tag(UINT8 *read_buf, UINT16 *offset1)
 ** Returns:         Success if Tag found
 **
 *******************************************************************************/
-tJBL_STATUS Check_Date_Tag(UINT8 *read_buf, UINT16 *offset1)
+tJBL_STATUS Check_Date_Tag(uint8_t *read_buf, uint16_t *offset1)
 {
     tJBL_STATUS status = STATUS_OK;
-    UINT16 offset      = *offset1;
+    uint16_t offset      = *offset1;
 
     if((read_buf[offset]<<8|read_buf[offset+1]) == TAG_EFF_DATE)
     {
-        UINT8 effDateLen = read_buf[offset+2];
+        uint8_t effDateLen = read_buf[offset+2];
         offset = offset+3+effDateLen;
         ALOGD("TAGID: TAG_EFF_DATE");
         if((read_buf[offset]<<8|read_buf[offset+1]) == TAG_EXP_DATE)
         {
-            UINT8 effExpLen = read_buf[offset+2];
+            uint8_t effExpLen = read_buf[offset+2];
             offset = offset+3+effExpLen;
             ALOGD("TAGID: TAG_EXP_DATE");
             status = STATUS_OK;
@@ -2639,7 +2639,7 @@ tJBL_STATUS Check_Date_Tag(UINT8 *read_buf, UINT16 *offset1)
     }
     else if((read_buf[offset]<<8|read_buf[offset+1]) == TAG_EXP_DATE)
     {
-        UINT8 effExpLen = read_buf[offset+2];
+        uint8_t effExpLen = read_buf[offset+2];
         offset = offset+3+effExpLen;
         ALOGD("TAGID: TAG_EXP_DATE");
         status = STATUS_OK;
@@ -2666,10 +2666,10 @@ tJBL_STATUS Check_Date_Tag(UINT8 *read_buf, UINT16 *offset1)
 ** Returns:         Success if Tag found
 **
 *******************************************************************************/
-tJBL_STATUS Check_45_Tag(UINT8 *read_buf, UINT16 *offset1, UINT8 *tag45Len)
+tJBL_STATUS Check_45_Tag(uint8_t *read_buf, uint16_t *offset1, uint8_t *tag45Len)
 {
     tJBL_STATUS status = STATUS_FAILED;
-    UINT16 offset      = *offset1;
+    uint16_t offset      = *offset1;
     if(read_buf[offset] == TAG_LSRE_SIGNID)
     {
         *tag45Len = read_buf[offset+1];
@@ -2698,15 +2698,15 @@ tJBL_STATUS Check_45_Tag(UINT8 *read_buf, UINT16 *offset1, UINT8 *tag45Len)
 **
 *******************************************************************************/
 tJBL_STATUS Certificate_Verification(Ala_ImageInfo_t *Os_info,
-Ala_TranscieveInfo_t *pTranscv_Info, UINT8 *read_buf, UINT16 *offset1,
-UINT8 *tag45Len)
+Ala_TranscieveInfo_t *pTranscv_Info, uint8_t *read_buf, uint16_t *offset1,
+uint8_t *tag45Len)
 {
     tJBL_STATUS status = STATUS_FAILED;
-    UINT16 offset      = *offset1;
-    INT32 wCertfLen = (read_buf[2]<<8|read_buf[3]);
+    uint16_t offset      = *offset1;
+    int32_t wCertfLen = (read_buf[2]<<8|read_buf[3]);
     tJBL_STATUS certf_found = STATUS_FAILED;
     static const char fn[] = "Certificate_Verification";
-    UINT8 tag_len_byte = Numof_lengthbytes(&read_buf[2], &wCertfLen);
+    uint8_t tag_len_byte = Numof_lengthbytes(&read_buf[2], &wCertfLen);
 
     pTranscv_Info->sSendData[0] = 0x80;
     pTranscv_Info->sSendData[1] = 0xA0;
@@ -2715,21 +2715,21 @@ UINT8 *tag45Len)
     /*If the certificate is less than 255 bytes*/
     if(wCertfLen <= 251)
     {
-        UINT8 tag7f49Off = 0;
-        UINT8 u7f49Len = 0;
-        UINT8 tag5f37Len = 0;
+        uint8_t tag7f49Off = 0;
+        uint8_t u7f49Len = 0;
+        uint8_t tag5f37Len = 0;
         ALOGD("Certificate is greater than 255");
         offset = offset+*tag45Len;
         ALOGD("%s: Before TAG_CCM_PERMISSION = %x",fn, read_buf[offset]);
         if(read_buf[offset] == TAG_CCM_PERMISSION)
         {
-            INT32 tag53Len = 0;
-            UINT8 len_byte = 0;
+            int32_t tag53Len = 0;
+            uint8_t len_byte = 0;
             offset =offset+1;
             len_byte = Numof_lengthbytes(&read_buf[offset], &tag53Len);
             offset = offset+tag53Len+len_byte;
             ALOGD("%s: Verified TAG TAG_CCM_PERMISSION = 0x53",fn);
-            if((UINT16)(read_buf[offset]<<8|read_buf[offset+1]) == TAG_SIG_RNS_COMP)
+            if((uint16_t)(read_buf[offset]<<8|read_buf[offset+1]) == TAG_SIG_RNS_COMP)
             {
                 tag7f49Off = offset;
                 u7f49Len   = read_buf[offset+2];
@@ -2738,7 +2738,7 @@ UINT8 *tag45Len)
                 {
                     return STATUS_FAILED;
                 }
-                if((UINT16)(read_buf[offset]<<8|read_buf[offset+1]) == 0x7f49)
+                if((uint16_t)(read_buf[offset]<<8|read_buf[offset+1]) == 0x7f49)
                 {
                     tag5f37Len = read_buf[offset+2];
                     if(read_buf[offset+3] != 0x86 || (read_buf[offset+4] != 65))
@@ -2781,21 +2781,21 @@ UINT8 *tag45Len)
     /*If the certificate is more than 255 bytes*/
     else
     {
-        UINT8 tag7f49Off = 0;
-        UINT8 u7f49Len = 0;
-        UINT8 tag5f37Len = 0;
+        uint8_t tag7f49Off = 0;
+        uint8_t u7f49Len = 0;
+        uint8_t tag5f37Len = 0;
         ALOGD("Certificate is greater than 255");
         offset = offset+*tag45Len;
         ALOGD("%s: Before TAG_CCM_PERMISSION = %x",fn, read_buf[offset]);
         if(read_buf[offset] == TAG_CCM_PERMISSION)
         {
-            INT32 tag53Len = 0;
-            UINT8 len_byte = 0;
+            int32_t tag53Len = 0;
+            uint8_t len_byte = 0;
             offset =offset+1;
             len_byte = Numof_lengthbytes(&read_buf[offset], &tag53Len);
             offset = offset+tag53Len+len_byte;
             ALOGD("%s: Verified TAG TAG_CCM_PERMISSION = 0x53",fn);
-            if((UINT16)(read_buf[offset]<<8|read_buf[offset+1]) == TAG_SIG_RNS_COMP)
+            if((uint16_t)(read_buf[offset]<<8|read_buf[offset+1]) == TAG_SIG_RNS_COMP)
             {
                 tag7f49Off = offset;
                 u7f49Len   = read_buf[offset+2];
@@ -2804,7 +2804,7 @@ UINT8 *tag45Len)
                 {
                     return STATUS_FAILED;
                 }
-                if((UINT16)(read_buf[offset]<<8|read_buf[offset+1]) == 0x7f49)
+                if((uint16_t)(read_buf[offset]<<8|read_buf[offset+1]) == 0x7f49)
                 {
                     tag5f37Len = read_buf[offset+2];
                     if(read_buf[offset+3] != 0x86 || (read_buf[offset+4] != 65))
@@ -2826,7 +2826,7 @@ UINT8 *tag45Len)
                 if(status != STATUS_OK)
                 {
 
-                    UINT8* RecvData = pTranscv_Info->sRecvData;
+                    uint8_t* RecvData = pTranscv_Info->sRecvData;
                     Write_Response_To_OutFile(Os_info, RecvData,
                     resp_len, LS_Cert);
                     return status;
@@ -2877,10 +2877,10 @@ return status;
 **
 *******************************************************************************/
 tJBL_STATUS Check_Complete_7F21_Tag(Ala_ImageInfo_t *Os_info,
-       Ala_TranscieveInfo_t *pTranscv_Info, UINT8 *read_buf, UINT16 *offset)
+       Ala_TranscieveInfo_t *pTranscv_Info, uint8_t *read_buf, uint16_t *offset)
 {
     static const char fn[] = "Check_Complete_7F21_Tag";
-    UINT8 tag45Len = 0;
+    uint8_t tag45Len = 0;
 
     if(STATUS_OK == Check_Certificate_Tag(read_buf, offset))
     {
@@ -2892,7 +2892,7 @@ tJBL_STATUS Check_Complete_7F21_Tag(Ala_ImageInfo_t *Os_info,
                {
                    if(STATUS_OK == Check_Date_Tag(read_buf, offset))
                    {
-                       UINT8 tag45Len = 0;
+                       uint8_t tag45Len = 0;
                        if(STATUS_OK == Check_45_Tag(read_buf, offset,
                        &tag45Len))
                        {
@@ -2920,24 +2920,24 @@ tJBL_STATUS Check_Complete_7F21_Tag(Ala_ImageInfo_t *Os_info,
 return STATUS_FAILED;
 }
 
-BOOLEAN ALA_UpdateExeStatus(UINT16 status)
+bool    ALA_UpdateExeStatus(uint16_t status)
 {
     fLS_STATUS = fopen(LS_STATUS_PATH, "w+");
     ALOGD("enter: ALA_UpdateExeStatus");
     if(fLS_STATUS == NULL)
     {
         ALOGE("Error opening LS Status file for backup: %s",strerror(errno));
-        return FALSE;
+        return false;
     }
     if((fprintf(fLS_STATUS, "%04x",status)) != 4)
     {
         ALOGE("Error updating LS Status backup: %s",strerror(errno));
         fclose(fLS_STATUS);
-        return FALSE;
+        return false;
     }
     ALOGD("exit: ALA_UpdateExeStatus");
     fclose(fLS_STATUS);
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -2953,7 +2953,7 @@ tJBL_STATUS ALA_getAppletLsStatus(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
 {
     static const char fn[] = "ALA_getAppletLsStatus";
     bool stat = false;
-    INT32 recvBufferActualSize = 0;
+    int32_t recvBufferActualSize = 0;
     IChannel_t *mchannel = gpAla_Dwnld_Context->mchannel;
 
     ALOGD("%s: enter", fn);
@@ -2967,8 +2967,8 @@ tJBL_STATUS ALA_getAppletLsStatus(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
     {
         pTranscv_Info->sSendData[0] = STORE_DATA_CLA | Os_info->Channel_Info[0].channel_id;
         pTranscv_Info->timeout = gTransceiveTimeout;
-        pTranscv_Info->sSendlength = (INT32)sizeof(GetData);
-        pTranscv_Info->sRecvlength = 1024;//(INT32)sizeof(INT32);
+        pTranscv_Info->sSendlength = (int32_t)sizeof(GetData);
+        pTranscv_Info->sRecvlength = 1024;//(int32_t)sizeof(int32_t);
 
 
         memcpy(&(pTranscv_Info->sSendData[1]), &GetData[1],
@@ -2981,7 +2981,7 @@ tJBL_STATUS ALA_getAppletLsStatus(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
                                 pTranscv_Info->sRecvlength,
                                 recvBufferActualSize,
                                 pTranscv_Info->timeout);
-        if((stat != TRUE) &&
+        if((stat != true) &&
            (recvBufferActualSize == 0x00))
         {
             status = STATUS_FAILED;
@@ -3035,11 +3035,11 @@ tJBL_STATUS ALA_getAppletLsStatus(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, 
 ** Returns:         SUCCESS/FAILURE
 **
 *******************************************************************************/
-tJBL_STATUS Get_LsStatus(UINT8 *pStatus)
+tJBL_STATUS Get_LsStatus(uint8_t *pStatus)
 {
     tJBL_STATUS status = STATUS_FAILED;
-    UINT8 lsStatus[2]    = {0x63,0x40};
-    UINT8 loopcnt = 0;
+    uint8_t lsStatus[2]    = {0x63,0x40};
+    uint8_t loopcnt = 0;
     fLS_STATUS = fopen(LS_STATUS_PATH, "r");
     if(fLS_STATUS == NULL)
     {

@@ -19,7 +19,7 @@
 #include <cutils/log.h>
 #include <dirent.h>
 
-static INT16 alaHandle;
+static int16_t alaHandle;
 extern pAla_Dwnld_Context_t gpAla_Dwnld_Context;
 /*static bool Ala_inUse = false;*/
 /*******************************************************************************
@@ -28,13 +28,13 @@ extern pAla_Dwnld_Context_t gpAla_Dwnld_Context;
 **
 ** Description:     Initializes the JCOP library and opens the DWP communication channel
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
 tJBL_STATUS ALA_Init(IChannel_t *channel)
 {
     static const char fn[] = "ALA_Init";
-    BOOLEAN stat = FALSE;
+    bool    stat = false;
     alaHandle  = EE_ERROR_OPEN_FAIL;
     ALOGD("%s: enter", fn);
 
@@ -49,7 +49,7 @@ tJBL_STATUS ALA_Init(IChannel_t *channel)
     /*TODO: inUse assignment should be with protection like using semaphore*/
     /*Ala_inUse = true;*/
     stat = initialize (channel);
-    if(stat != TRUE)
+    if(stat != true)
     {
         ALOGE("%s: failed", fn);
     }
@@ -63,18 +63,18 @@ tJBL_STATUS ALA_Init(IChannel_t *channel)
             if(alaHandle == EE_ERROR_OPEN_FAIL)
             {
                 ALOGE("%s:Open DWP communication is failed", fn);
-                stat = FALSE;
+                stat = false;
             }
             else
             {
                 ALOGE("%s:Open DWP communication is success", fn);
-                stat = TRUE;
+                stat = true;
             }
         }
         else
         {
             ALOGE("%s: NULL DWP channel", fn);
-            stat = FALSE;
+            stat = false;
         }
     }
     return (stat == true)?STATUS_OK:STATUS_FAILED;
@@ -90,9 +90,9 @@ tJBL_STATUS ALA_Init(IChannel_t *channel)
 **
 *******************************************************************************/
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-tJBL_STATUS ALA_Start(const char *name, const char *dest, UINT8 *pdata, UINT16 len, UINT8 *respSW)
+tJBL_STATUS ALA_Start(const char *name, const char *dest, uint8_t *pdata, uint16_t len, uint8_t *respSW)
 #else
-tJBL_STATUS ALA_Start(const char *name, UINT8 *pdata, UINT16 len)
+tJBL_STATUS ALA_Start(const char *name, uint8_t *pdata, uint16_t len)
 #endif
 {
     static const char fn[] = "ALA_Start";
@@ -122,13 +122,13 @@ tJBL_STATUS ALA_Start(const char *name, UINT8 *pdata, UINT16 len)
 **
 ** Description:     Deinitializes the ALA module
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
 bool ALA_DeInit()
 {
     static const char fn[] = "ALA_DeInit";
-    BOOLEAN stat = FALSE;
+    bool    stat = false;
     IChannel_t* channel = gpAla_Dwnld_Context->mchannel;
     ALOGD("%s: enter", fn);
     if(channel != NULL)
@@ -139,7 +139,7 @@ bool ALA_DeInit()
             if(channel->close != NULL)
             {
                 stat = channel->close(alaHandle);
-                if(stat != TRUE)
+                if(stat != true)
                 {
                     ALOGE("%s:closing DWP channel is failed", fn);
                 }
@@ -147,7 +147,7 @@ bool ALA_DeInit()
             else
             {
                 ALOGE("%s: NULL fp DWP_close", fn);
-                stat = FALSE;
+                stat = false;
             }
         }
     }
@@ -167,14 +167,14 @@ bool ALA_DeInit()
 **
 ** Description:     Gets the list of applets present the pre-defined directory
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
-void ALA_GetlistofApplets(char *list[], UINT8* num)
+void ALA_GetlistofApplets(char *list[], uint8_t* num)
 {
   static const char dir[] = "/data/ala/";
   struct dirent *dp;
-  UINT8 xx =0;
+  uint8_t xx =0;
   DIR *fd;
 
   if ((fd = opendir(dir)) == NULL)
@@ -201,7 +201,7 @@ void ALA_GetlistofApplets(char *list[], UINT8* num)
 
   }
   *num = xx;
-  ALOGD("%s: number of applets found=0x0%x", __FUNCTION__, *num);
+  ALOGD("%s: number of applets found=0x0%x", __func__, *num);
   closedir(fd);
 }
 
@@ -211,10 +211,10 @@ void ALA_GetlistofApplets(char *list[], UINT8* num)
 **
 ** Description:     Get the JSBL reference key
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
-tJBL_STATUS ALA_GetCertificateKey(UINT8 *pKey, INT32 *pKeylen)
+tJBL_STATUS ALA_GetCertificateKey(uint8_t *pKey, int32_t *pKeylen)
 {
     static const char fn[] = "ALA_GetCertificateKey";
     tJBL_STATUS status = STATUS_FAILED;
@@ -238,10 +238,10 @@ tJBL_STATUS ALA_GetCertificateKey(UINT8 *pKey, INT32 *pKeylen)
 **
 ** Description:     Get the version of Loder service client and applet
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
-tJBL_STATUS ALA_lsGetVersion(UINT8 *pVersion)
+tJBL_STATUS ALA_lsGetVersion(uint8_t *pVersion)
 {
     static const char fn[] = "ALA_lsGetVersion";
     tJBL_STATUS status = STATUS_FAILED;
@@ -264,10 +264,10 @@ tJBL_STATUS ALA_lsGetVersion(UINT8 *pVersion)
 **
 ** Description:     Get the version of Loder service client and applet
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
-tJBL_STATUS ALA_lsGetStatus(UINT8 *pVersion)
+tJBL_STATUS ALA_lsGetStatus(uint8_t *pVersion)
 {
     static const char fn[] = "ALA_lsGetStatus";
     tJBL_STATUS status = STATUS_FAILED;
@@ -290,10 +290,10 @@ tJBL_STATUS ALA_lsGetStatus(UINT8 *pVersion)
 **
 ** Description:     Get the version of Loder service client and applet
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
-tJBL_STATUS ALA_lsGetAppletStatus(UINT8 *pVersion)
+tJBL_STATUS ALA_lsGetAppletStatus(uint8_t *pVersion)
 {
     static const char fn[] = "ALA_lsGetStatus";
     tJBL_STATUS status = STATUS_FAILED;

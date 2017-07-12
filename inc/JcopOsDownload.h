@@ -20,20 +20,20 @@
 
 typedef struct JcopOs_TranscieveInfo
 {
-    INT32 timeout;
-    UINT8 sRecvData[1024];
-    UINT8 *sSendData;
-    INT32 sSendlength;
+    int32_t timeout;
+    uint8_t sRecvData[1024];
+    uint8_t *sSendData;
+    int32_t sSendlength;
     int sRecvlength;
 }JcopOs_TranscieveInfo_t;
 
 typedef struct JcopOs_Version_Info
 {
-    UINT8 osid;
-    UINT8 ver1;
-    UINT8 ver0;
-    UINT8 OtherValid;
-    UINT8 ver_status;
+    uint8_t osid;
+    uint8_t ver1;
+    uint8_t ver0;
+    uint8_t OtherValid;
+    uint8_t ver_status;
 }JcopOs_Version_Info_t;
 typedef struct JcopOs_ImageInfo
 {
@@ -41,7 +41,7 @@ typedef struct JcopOs_ImageInfo
     int   fls_size;
     char  fls_path[256];
     int   index;
-    UINT8 cur_state;
+    uint8_t cur_state;
     JcopOs_Version_Info_t    version_info;
 }JcopOs_ImageInfo_t;
 typedef struct JcopOs_Dwnld_Context
@@ -53,13 +53,13 @@ typedef struct JcopOs_Dwnld_Context
 }JcopOs_Dwnld_Context_t,*pJcopOs_Dwnld_Context_t;
 
 
-static UINT8 Trigger_APDU[] = {0x4F, 0x70, 0x80, 0x13, 0x04, 0xDE, 0xAD, 0xBE, 0xEF, 0x00};
-static UINT8 GetInfo_APDU[] = {0x00, //CLA
+static uint8_t Trigger_APDU[] = {0x4F, 0x70, 0x80, 0x13, 0x04, 0xDE, 0xAD, 0xBE, 0xEF, 0x00};
+static uint8_t GetInfo_APDU[] = {0x00, //CLA
                                0xA4, 0x04, 0x00, 0x0C, //INS, P1, P2, Lc
                                0xD2, 0x76, 0x00, 0x00, 0x85, 0x41, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00,   //Data
                                0x00 //Le
                               };
-static UINT8 GetInfo_Data[] = {0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x72, 0x4F, 0x53};
+static uint8_t GetInfo_Data[] = {0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x72, 0x4F, 0x53};
 
 #define OSID_OFFSET  9
 #define VER1_OFFSET  10
@@ -71,7 +71,7 @@ static UINT8 GetInfo_Data[] = {0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x72, 0x4F, 0
 #define JCOP_UPDATE_STATE2 2
 #define JCOP_UPDATE_STATE3 3
 #define JCOP_MAX_RETRY_CNT 3
-#define JCOP_INFO_PATH  "/data/nfc/jcop_info.txt"
+#define JCOP_INFO_PATH  "/data/vendor/nfc/jcop_info.txt"
 
 #define JCOP_MAX_BUF_SIZE 10240
 
@@ -141,6 +141,6 @@ IChannel_t *mchannel;
 private:
 static JcopOsDwnld sJcopDwnld;
 bool mIsInit;
-tJBL_STATUS GetJcopOsState(JcopOs_ImageInfo_t *Os_info, UINT8 *counter);
-tJBL_STATUS SetJcopOsState(JcopOs_ImageInfo_t *Os_info, UINT8 state);
+tJBL_STATUS GetJcopOsState(JcopOs_ImageInfo_t *Os_info, uint8_t *counter);
+tJBL_STATUS SetJcopOsState(JcopOs_ImageInfo_t *Os_info, uint8_t state);
 };

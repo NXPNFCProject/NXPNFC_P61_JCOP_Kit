@@ -52,7 +52,7 @@ unsigned char JCDNLD_StartDownload();
 **
 ** Description:     Deinitializes the JCOP Lib
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
 bool JCDNLD_DeInit();
@@ -63,7 +63,7 @@ bool JCDNLD_DeInit();
 **
 ** Description:     Check the existing JCOP OS version
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
 bool JCDNLD_CheckVersion();

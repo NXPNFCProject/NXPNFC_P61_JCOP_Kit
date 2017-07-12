@@ -29,7 +29,7 @@ typedef struct IChannel
 ** Returns:         True if ok.
 **
 *******************************************************************************/
-INT16 (*open)();
+int16_t (*open)();
 /*******************************************************************************
 **
 ** Function:        close
@@ -39,7 +39,7 @@ INT16 (*open)();
 ** Returns:         True if ok.
 **
 *******************************************************************************/
-bool (*close)(INT16 mHandle);
+bool (*close)(int16_t mHandle);
 
 /*******************************************************************************
 **
@@ -56,8 +56,8 @@ bool (*close)(INT16 mHandle);
 ** Returns:         True if ok.
 **
 *******************************************************************************/
-bool (*transceive) (UINT8* xmitBuffer, INT32 xmitBufferSize, UINT8* recvBuffer,
-                     INT32 recvBufferMaxSize, INT32& recvBufferActualSize, INT32 timeoutMillisec);
+bool (*transceive) (uint8_t* xmitBuffer, int32_t xmitBufferSize, uint8_t* recvBuffer,
+                     int32_t recvBufferMaxSize, int32_t& recvBufferActualSize, int32_t timeoutMillisec);
 
 /*******************************************************************************
 **

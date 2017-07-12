@@ -46,9 +46,9 @@ unsigned char ALA_Init(IChannel *channel);
 **
 *******************************************************************************/
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-unsigned char ALA_Start(const char *name, const char *dest, UINT8 *pdata, UINT16 len, UINT8 *respSW);
+unsigned char ALA_Start(const char *name, const char *dest, uint8_t *pdata, uint16_t len, uint8_t *respSW);
 #else
-unsigned char ALA_Start(const char *name, UINT8 *pdata, UINT16 len);
+unsigned char ALA_Start(const char *name, uint8_t *pdata, uint16_t len);
 #endif
 
 /*******************************************************************************
@@ -57,7 +57,7 @@ unsigned char ALA_Start(const char *name, UINT8 *pdata, UINT16 len);
 **
 ** Description:     Deinitializes the ALA Lib
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
 bool ALA_DeInit();
@@ -72,13 +72,13 @@ bool ALA_DeInit();
 ** Returns:         byte[] array.
 **
 *******************************************************************************/
-unsigned char ALA_lsGetVersion(UINT8 *pVersion);
-unsigned char ALA_lsGetStatus(UINT8 *pVersion);
-unsigned char ALA_lsGetAppletStatus(UINT8 *pVersion);
+unsigned char ALA_lsGetVersion(uint8_t *pVersion);
+unsigned char ALA_lsGetStatus(uint8_t *pVersion);
+unsigned char ALA_lsGetAppletStatus(uint8_t *pVersion);
 #else
-void ALA_GetlistofApplets(char *list[], UINT8* num);
+void ALA_GetlistofApplets(char *list[], uint8_t* num);
 
-unsigned char ALA_GetCertificateKey(UINT8 *pKey, INT32 *pKeylen);
+unsigned char ALA_GetCertificateKey(uint8_t *pKey, int32_t *pKeylen);
 #endif
 
 inline int FSCANF_BYTE(FILE *stream, const char *format, void* pVal)

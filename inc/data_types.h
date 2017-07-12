@@ -15,25 +15,29 @@
   */
 #ifndef DATA_TYPES_H
 #define DATA_TYPES_H
-
+#include <stdint.h>
+#include <stdbool.h>
 #ifndef NULL
 #define NULL     0
 #endif
+
+/*
+#ifndef false
+#define false  0
+#endif
+*/
 
 #ifndef FALSE
 #define FALSE  0
 #endif
 
-typedef unsigned char   UINT8;
-typedef unsigned short  UINT16;
-typedef unsigned long   UINT32;
-typedef unsigned long long int UINT64;
-typedef signed   long   INT32;
-typedef signed   char   INT8;
-typedef signed   short  INT16;
-typedef unsigned char   BOOLEAN;
-typedef UINT32          UINTPTR;
-typedef UINT32          TIME_STAMP;
+typedef uint32_t        TIME_STAMP;
+
+/*
+#ifndef true
+#define true   (!false)
+#endif
+*/
 
 #ifndef TRUE
 #define TRUE   (!FALSE)
@@ -50,6 +54,6 @@ typedef unsigned char   UBYTE;
 
 #define EE_ERROR_OPEN_FAIL -1
 
-typedef UINT8 tJBL_STATUS;
+typedef uint8_t tJBL_STATUS;
 
 #endif

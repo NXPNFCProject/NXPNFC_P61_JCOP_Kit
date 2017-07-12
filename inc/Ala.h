@@ -23,18 +23,18 @@
 
 typedef struct Ala_ChannelInfo
 {
-    UINT8 channel_id;
+    uint8_t channel_id;
     bool  isOpend;
 }Ala_ChannelInfo_t;
 
 typedef struct Ala_TranscieveInfo
 {
-    INT32 timeout;
-    UINT8 sRecvData[1024];
-    UINT8 sSendData[1024];
-    INT32 sSendlength;
+    int32_t timeout;
+    uint8_t sRecvData[1024];
+    uint8_t sSendData[1024];
+    int32_t sSendlength;
     int   sRecvlength;
-    UINT8 sTemp_recvbuf[1024];
+    uint8_t sTemp_recvbuf[1024];
 }Ala_TranscieveInfo_t;
 
 #if(NXP_LDR_SVC_VER_2 == TRUE)
@@ -49,7 +49,7 @@ typedef struct Ala_ImageInfo
     char                 fls_RespPath[384];
     int                  bytes_wrote;
     Ala_ChannelInfo_t    Channel_Info[10];
-    UINT8                channel_cnt;
+    uint8_t              channel_cnt;
 }Ala_ImageInfo_t;
 typedef enum
 {
@@ -66,7 +66,7 @@ typedef struct Ala_ImageInfo
     char                 fls_path[256];
     int                  bytes_read;
     Ala_ChannelInfo_t    Channel_Info[10];
-    UINT8                channel_cnt;
+    uint8_t              channel_cnt;
 }Ala_ImageInfo_t;
 #endif
 typedef struct Ala_lib_Context
@@ -76,30 +76,30 @@ typedef struct Ala_lib_Context
     Ala_TranscieveInfo_t  Transcv_Info;
 }Ala_Dwnld_Context_t,*pAla_Dwnld_Context_t;
 
-static UINT8 OpenChannel[] = {0x00, 0x70, 0x00, 0x00, 0x01};
+static uint8_t OpenChannel[] = {0x00, 0x70, 0x00, 0x00, 0x01};
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-static UINT8 GetData[] = {0x80, 0xCA, 0x00, 0x46, 0x00};
+static uint8_t GetData[] = {0x80, 0xCA, 0x00, 0x46, 0x00};
 #ifndef NXP_LS_AID
-static UINT8 SelectAla[] = {0x00, 0xA4, 0x04, 0x00, 0x0D, 0xA0, 0x00, 0x00, 0x03, 0x96, 0x41, 0x4C, 0x41, 0x01, 0x43, 0x4F, 0x52, 0x01};
+static uint8_t SelectAla[] = {0x00, 0xA4, 0x04, 0x00, 0x0D, 0xA0, 0x00, 0x00, 0x03, 0x96, 0x41, 0x4C, 0x41, 0x01, 0x43, 0x4F, 0x52, 0x01};
 #else
-static UINT8 SelectAla[] = {0x00, 0xA4, 0x04, 0x00, 0x0F, 0xA0, 0x00, 0x00, 0x03, 0x96, 0x54, 0x43, 0x00, 0x00, 0x00, 0x01, 0x00, 0x0B
+static uint8_t SelectAla[] = {0x00, 0xA4, 0x04, 0x00, 0x0F, 0xA0, 0x00, 0x00, 0x03, 0x96, 0x54, 0x43, 0x00, 0x00, 0x00, 0x01, 0x00, 0x0B
 , 0x00,0x01};
 #endif
 #else
-static UINT8 SelectAla[] = {0x00, 0xA4, 0x04, 0x00, 0x0D, 0xA0, 0x00, 0x00, 0x03, 0x96, 0x41, 0x4C, 0x41, 0x01, 0x43, 0x4F, 0x52, 0x01};
+static uint8_t SelectAla[] = {0x00, 0xA4, 0x04, 0x00, 0x0D, 0xA0, 0x00, 0x00, 0x03, 0x96, 0x41, 0x4C, 0x41, 0x01, 0x43, 0x4F, 0x52, 0x01};
 #endif
 /*ALA2*/
 #if(NXP_LDR_SVC_VER_2 == TRUE)
 #define NOOFAIDS     0x03
 #define LENOFAIDS    0x16
 #ifndef NXP_LS_AID
-static UINT8 ArrayOfAIDs[NOOFAIDS][LENOFAIDS] = {
+static uint8_t ArrayOfAIDs[NOOFAIDS][LENOFAIDS] = {
         {0x12, 0x00, 0xA4, 0x04, 0x00, 0x0D, 0xA0, 0x00, 0x00, 0x03, 0x96, 0x41, 0x4C, 0x41, 0x01, 0x4C, 0x44, 0x52, 0x01,0x00,0x00,0x00},
         {0x12, 0x00, 0xA4, 0x04, 0x00, 0x0D, 0xA0, 0x00, 0x00, 0x03, 0x96, 0x41, 0x4C, 0x41, 0x01, 0x43, 0x4F, 0x52, 0x01,0x00,0x00,0x00},
         {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}
 };
 #else
-static UINT8 ArrayOfAIDs[NOOFAIDS][LENOFAIDS] = {
+static uint8_t ArrayOfAIDs[NOOFAIDS][LENOFAIDS] = {
         {0x14, 0x00, 0xA4, 0x04, 0x00, 0x0F, 0xA0, 0x00, 0x00, 0x03, 0x96, 0x54, 0x43, 0x00, 0x00, 0x00, 0x01, 0x00, 0x0B,0x00,0x02,0x00},
         {0x14, 0x00, 0xA4, 0x04, 0x00, 0x0F, 0xA0, 0x00, 0x00, 0x03, 0x96, 0x54, 0x43, 0x00, 0x00, 0x00, 0x01, 0x00, 0x0B,0x00,0x01,0x00},
         {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}
@@ -126,10 +126,10 @@ static UINT8 ArrayOfAIDs[NOOFAIDS][LENOFAIDS] = {
 
 #define LS_ABORT_SW1        0x69
 #define LS_ABORT_SW2        0x87
-#define AID_MEM_PATH       "/data/nfc/AID_MEM.txt"
-#define LS_STATUS_PATH     "/data/nfc/LS_Status.txt"
-#define LS_SRC_BACKUP      "/data/nfc/LS_Src_Backup.txt"
-#define LS_DST_BACKUP      "/data/nfc/LS_Dst_Backup.txt"
+#define AID_MEM_PATH       "/data/vendor/nfc/AID_MEM.txt"
+#define LS_STATUS_PATH     "/data/vendor/nfc/LS_Status.txt"
+#define LS_SRC_BACKUP      "/data/vendor/nfc/LS_Src_Backup.txt"
+#define LS_DST_BACKUP      "/data/vendor/nfc/LS_Dst_Backup.txt"
 #define MAX_CERT_LEN        (255+137)
 
 #endif
@@ -177,7 +177,7 @@ static UINT8 ArrayOfAIDs[NOOFAIDS][LENOFAIDS] = {
 ** Returns:         True if ok.
 **
 *******************************************************************************/
-BOOLEAN initialize (IChannel_t *channel);
+bool    initialize (IChannel_t *channel);
 
 /*******************************************************************************
 **
@@ -191,11 +191,11 @@ BOOLEAN initialize (IChannel_t *channel);
 void finalize ();
 
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-tJBL_STATUS Perform_ALA(const char *path,const char *dest, const UINT8 *pdata, UINT16 len, UINT8 *respSW);
+tJBL_STATUS Perform_ALA(const char *path,const char *dest, const uint8_t *pdata, uint16_t len, uint8_t *respSW);
 #else
-tJBL_STATUS Perform_ALA(const char *path, const UINT8 *pdata, UINT16 len);
+tJBL_STATUS Perform_ALA(const char *path, const uint8_t *pdata, uint16_t len);
 #endif
-tJBL_STATUS GetJsbl_Certificate_Refkey(UINT8 *pkey, INT32 *pKeylen);
+tJBL_STATUS GetJsbl_Certificate_Refkey(uint8_t *pkey, int32_t *pKeylen);
 
 static tJBL_STATUS
 ALA_OpenChannel(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo);
@@ -213,33 +213,33 @@ ALA_loadapplet(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_
 static tJBL_STATUS
 ALA_update_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo), const char *name, const char *dest);
 
-tJBL_STATUS GetLs_Version(UINT8 *pKey);
+tJBL_STATUS GetLs_Version(uint8_t *pKey);
 
 tJBL_STATUS GetVer_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo));
 
-tJBL_STATUS Write_Response_To_OutFile(Ala_ImageInfo_t *image_info, UINT8* RecvData, INT32 recvlen, Ls_TagType tType);
+tJBL_STATUS Write_Response_To_OutFile(Ala_ImageInfo_t *image_info, uint8_t* RecvData, int32_t recvlen, Ls_TagType tType);
 
-tJBL_STATUS Check_Certificate_Tag(UINT8 *read_buf, UINT16 *offset1);
+tJBL_STATUS Check_Certificate_Tag(uint8_t *read_buf, uint16_t *offset1);
 
-tJBL_STATUS Check_SerialNo_Tag(UINT8 *read_buf, UINT16 *offset1);
+tJBL_STATUS Check_SerialNo_Tag(uint8_t *read_buf, uint16_t *offset1);
 
-tJBL_STATUS Check_LSRootID_Tag(UINT8 *read_buf, UINT16 *offset1);
+tJBL_STATUS Check_LSRootID_Tag(uint8_t *read_buf, uint16_t *offset1);
 
-tJBL_STATUS Check_CertHoldID_Tag(UINT8 *read_buf, UINT16 *offset1);
+tJBL_STATUS Check_CertHoldID_Tag(uint8_t *read_buf, uint16_t *offset1);
 
-tJBL_STATUS Check_Date_Tag(UINT8 *read_buf, UINT16 *offset1);
+tJBL_STATUS Check_Date_Tag(uint8_t *read_buf, uint16_t *offset1);
 
-tJBL_STATUS Check_45_Tag(UINT8 *read_buf, UINT16 *offset1, UINT8 *tag45Len);
+tJBL_STATUS Check_45_Tag(uint8_t *read_buf, uint16_t *offset1, uint8_t *tag45Len);
 
 tJBL_STATUS Certificate_Verification(Ala_ImageInfo_t *Os_info, Ala_TranscieveInfo_t
-*pTranscv_Info, UINT8 *read_buf, UINT16 *offset1, UINT8 *tag45Len);
+*pTranscv_Info, uint8_t *read_buf, uint16_t *offset1, uint8_t *tag45Len);
 
 tJBL_STATUS Check_Complete_7F21_Tag(Ala_ImageInfo_t *Os_info,
-       Ala_TranscieveInfo_t *pTranscv_Info, UINT8 *read_buf, UINT16 *offset);
-BOOLEAN ALA_UpdateExeStatus(UINT16 status);
+       Ala_TranscieveInfo_t *pTranscv_Info, uint8_t *read_buf, uint16_t *offset);
+bool    ALA_UpdateExeStatus(uint16_t status);
 tJBL_STATUS ALA_getAppletLsStatus(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info);
-tJBL_STATUS Get_LsStatus(UINT8 *pVersion);
-tJBL_STATUS Get_LsAppletStatus(UINT8 *pVersion);
+tJBL_STATUS Get_LsStatus(uint8_t *pVersion);
+tJBL_STATUS Get_LsAppletStatus(uint8_t *pVersion);
 #else
 static tJBL_STATUS
 ALA_update_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo), const char *name);
@@ -257,26 +257,26 @@ tJBL_STATUS ALA_SendtoAla(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_Tran
 #endif
 tJBL_STATUS ALA_CloseChannel(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info);
 #if(NXP_LDR_SVC_VER_2 == TRUE)
-tJBL_STATUS ALA_ProcessResp(Ala_ImageInfo_t *image_info, INT32 recvlen, Ala_TranscieveInfo_t *trans_info, Ls_TagType tType);
+tJBL_STATUS ALA_ProcessResp(Ala_ImageInfo_t *image_info, int32_t recvlen, Ala_TranscieveInfo_t *trans_info, Ls_TagType tType);
 #else
-tJBL_STATUS ALA_ProcessResp(Ala_ImageInfo_t *image_info, INT32 recvlen, Ala_TranscieveInfo_t *trans_info);
+tJBL_STATUS ALA_ProcessResp(Ala_ImageInfo_t *image_info, int32_t recvlen, Ala_TranscieveInfo_t *trans_info);
 #endif
 #if(NXP_LDR_SVC_VER_2 == TRUE)
 tJBL_STATUS ALA_Check_KeyIdentifier(Ala_ImageInfo_t *Os_info, tJBL_STATUS status,
-   Ala_TranscieveInfo_t *pTranscv_Info, UINT8* temp_buf, tJBL_STATUS flag,
-   INT32 wNewLen);
+   Ala_TranscieveInfo_t *pTranscv_Info, uint8_t* temp_buf, tJBL_STATUS flag,
+   int32_t wNewLen);
 #else
 tJBL_STATUS ALA_Check_KeyIdentifier(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info);
 #endif
-tJBL_STATUS ALA_ReadScript(Ala_ImageInfo_t *Os_info, UINT8 *read_buf);
+tJBL_STATUS ALA_ReadScript(Ala_ImageInfo_t *Os_info, uint8_t *read_buf);
 
-tJBL_STATUS Process_EseResponse(Ala_TranscieveInfo_t *pTranscv_Info, INT32 recv_len, Ala_ImageInfo_t *Os_info);
+tJBL_STATUS Process_EseResponse(Ala_TranscieveInfo_t *pTranscv_Info, int32_t recv_len, Ala_ImageInfo_t *Os_info);
 
-tJBL_STATUS Process_SelectRsp(UINT8* Recv_data, INT32 Recv_len);
+tJBL_STATUS Process_SelectRsp(uint8_t* Recv_data, int32_t Recv_len);
 #ifdef JCOP3_WR
 tJBL_STATUS Send_Backall_Loadcmds(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info);
 
 tJBL_STATUS Bufferize_load_cmds(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info);
 #endif
-UINT8 Numof_lengthbytes(UINT8 *read_buf, INT32 *wLen);
+uint8_t Numof_lengthbytes(uint8_t *read_buf, int32_t *wLen);
 #endif /*ALA_H*/

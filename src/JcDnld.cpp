@@ -21,7 +21,7 @@
 JcopOsDwnld *jd;
 IChannel_t *channel;
 static bool inUse = false;
-static INT16 jcHandle;
+static int16_t jcHandle;
 extern pJcopOs_Dwnld_Context_t gpJcopOs_Dwnld_Context;
 /*******************************************************************************
 **
@@ -29,13 +29,13 @@ extern pJcopOs_Dwnld_Context_t gpJcopOs_Dwnld_Context;
 **
 ** Description:     Initializes the JCOP library and opens the DWP communication channel
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
 tJBL_STATUS JCDNLD_Init(IChannel_t *channel)
 {
     static const char fn[] = "JCDNLD_Init";
-    BOOLEAN stat = FALSE;
+    bool    stat = false;
     jcHandle = EE_ERROR_OPEN_FAIL;
     ALOGD("%s: enter", fn);
 
@@ -51,7 +51,7 @@ tJBL_STATUS JCDNLD_Init(IChannel_t *channel)
     inUse = true;
     jd = JcopOsDwnld::getInstance();
     stat = jd->initialize (channel);
-    if(stat != TRUE)
+    if(stat != true)
     {
         ALOGE("%s: failed", fn);
     }
@@ -64,18 +64,18 @@ tJBL_STATUS JCDNLD_Init(IChannel_t *channel)
             if(jcHandle == EE_ERROR_OPEN_FAIL)
             {
                 ALOGE("%s:Open DWP communication is failed", fn);
-                stat = FALSE;
+                stat = false;
             }
             else
             {
                 ALOGE("%s:Open DWP communication is success", fn);
-                stat = TRUE;
+                stat = true;
             }
         }
         else
         {
             ALOGE("%s: NULL DWP channel", fn);
-            stat = FALSE;
+            stat = false;
         }
     }
     return (stat == true)?STATUS_OK:STATUS_FAILED;
@@ -94,7 +94,7 @@ tJBL_STATUS JCDNLD_StartDownload()
 {
     static const char fn[] = "JCDNLD_StartDownload";
     tJBL_STATUS status = STATUS_FAILED;
-    BOOLEAN stat = FALSE;
+    bool    stat = false;
 
     status = jd->JcopOs_Download();
     ALOGE("%s: Exit; status=0x0%X", fn, status);
@@ -107,13 +107,13 @@ tJBL_STATUS JCDNLD_StartDownload()
 **
 ** Description:     Deinitializes the JCOP Lib
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
 bool JCDNLD_DeInit()
 {
     static const char fn[] = "JCDNLD_DeInit";
-    BOOLEAN stat = FALSE;
+    bool    stat = false;
     ALOGD("%s: enter", fn);
 
     if(gpJcopOs_Dwnld_Context != NULL)
@@ -125,7 +125,7 @@ bool JCDNLD_DeInit()
             if(channel->close != NULL)
             {
                 stat = channel->close(jcHandle);
-                if(stat != TRUE)
+                if(stat != true)
                 {
                     ALOGE("%s:closing DWP channel is failed", fn);
                 }
@@ -133,7 +133,7 @@ bool JCDNLD_DeInit()
             else
             {
                 ALOGE("%s: NULL fp DWP_close", fn);
-                stat = FALSE;
+                stat = false;
             }
         }
     }
@@ -153,7 +153,7 @@ bool JCDNLD_DeInit()
 **
 ** Description:     Check the existing JCOP OS version
 **
-** Returns:         TRUE if ok.
+** Returns:         true if ok.
 **
 *******************************************************************************/
 bool JCDNLD_CheckVersion()
@@ -162,5 +162,5 @@ bool JCDNLD_CheckVersion()
     /**
      * Need to implement in case required
      * */
-    return TRUE;
+    return true;
 }
