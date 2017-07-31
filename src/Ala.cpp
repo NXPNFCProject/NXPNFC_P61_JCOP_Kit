@@ -2476,6 +2476,7 @@ tJBL_STATUS Write_Response_To_OutFile(Ala_ImageInfo_t *image_info, uint8_t* Recv
         ALOGE("%s: SUCCESS Response written to script out file; status=0x%lx", fn, (status));
         wStatus = STATUS_OK;
     }
+    fflush(image_info->fResp);
     return wStatus;
 }
 
