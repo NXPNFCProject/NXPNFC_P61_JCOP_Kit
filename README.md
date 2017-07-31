@@ -22,3 +22,4 @@
 | android-7.1.1_r1                     |  7.3.0_N (PN548C2/PN551) |  SEAccessKit_AR7.3.0_OpnSrc |
 | android-7.1.1_r1                     |  7.4.0_N (PN553) |  SEAccessKit_AR7.4.0_OpnSrc |
 | android-o-preview2                     |  8.0.9_O (PN553/PN557) |  SEAccessKit_AR8.0.9_OpnSrc |
+| android-o-preview2                     |  8.0.C_O (PN553/PN557) |  SEAccessKit_AR8.0.C_OpnSrc |
