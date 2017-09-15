@@ -24,3 +24,4 @@
 | android-o-preview2                     |  8.0.9_O (PN553/PN557) |  SEAccessKit_AR8.0.9_OpnSrc |
 | android-o-preview2                     |  8.0.C_O (PN553/PN557) |  SEAccessKit_AR8.0.C_OpnSrc |
 | android-o-preview2                     |  8.0.13_O (PN553/PN557) |  SEAccessKit_AR8.0.13_OpnSrc |
+| android-8.0.0_r4               |  8.1.0_O (PN553) |  SEAccessKit_AR8.1.0_OpnSrc |
