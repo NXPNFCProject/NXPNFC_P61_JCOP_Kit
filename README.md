@@ -27,3 +27,4 @@
 | android-8.0.0_r4               |  8.1.0_O (PN553) |  SEAccessKit_AR8.1.0_OpnSrc |
 | android-8.0.0_r4               |  8.2.0_O (PN557) |  SEAccessKit_AR8.2.0_OpnSrc |
 | android-8.0.0_r4               |  8.2.0_O (PN557) |  SEAccessKit_AR8.2.3_OpnSrc |
+| android-8.0.0_r4               |  8.3.0_O (PN551/PN548C2) |  SEAccessKit_AR8.3.0_OpnSrc |
