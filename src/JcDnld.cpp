@@ -1,22 +1,27 @@
- /*
-  * Copyright (C) 2015 NXP Semiconductors
-  *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  *
-  *      http://www.apache.org/licenses/LICENSE-2.0
-  *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  */
+/******************************************************************************
+ *
+ *  Copyright 2018 NXP
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+#include <data_types.h>
 #include "JcDnld.h"
 #include "JcopOsDownload.h"
-#include <data_types.h>
-#include <cutils/log.h>
+
+using android::base::StringPrintf;
 
 JcopOsDwnld *jd;
 IChannel_t *channel;
@@ -37,7 +42,7 @@ tJBL_STATUS JCDNLD_Init(IChannel_t *channel)
     static const char fn[] = "JCDNLD_Init";
     bool    stat = false;
     jcHandle = EE_ERROR_OPEN_FAIL;
-    ALOGD("%s: enter", fn);
+    LOG(INFO) << StringPrintf("%s: enter", fn);
 
     if (inUse == true)
     {
@@ -53,7 +58,7 @@ tJBL_STATUS JCDNLD_Init(IChannel_t *channel)
     stat = jd->initialize (channel);
     if(stat != true)
     {
-        ALOGE("%s: failed", fn);
+        LOG(ERROR) << StringPrintf("%s: failed", fn);
     }
     else
     {
@@ -63,18 +68,18 @@ tJBL_STATUS JCDNLD_Init(IChannel_t *channel)
             jcHandle = channel->open();
             if(jcHandle == EE_ERROR_OPEN_FAIL)
             {
-                ALOGE("%s:Open DWP communication is failed", fn);
+                LOG(ERROR) << StringPrintf("%s:Open DWP communication is failed", fn);
                 stat = false;
             }
             else
             {
-                ALOGE("%s:Open DWP communication is success", fn);
+                LOG(ERROR) << StringPrintf("%s:Open DWP communication is success", fn);
                 stat = true;
             }
         }
         else
         {
-            ALOGE("%s: NULL DWP channel", fn);
+            LOG(ERROR) << StringPrintf("%s: NULL DWP channel", fn);
             stat = false;
         }
     }
@@ -93,11 +98,10 @@ tJBL_STATUS JCDNLD_Init(IChannel_t *channel)
 tJBL_STATUS JCDNLD_StartDownload()
 {
     static const char fn[] = "JCDNLD_StartDownload";
+    LOG(INFO) << StringPrintf("%s: Enter", fn);
     tJBL_STATUS status = STATUS_FAILED;
-    bool    stat = false;
-
     status = jd->JcopOs_Download();
-    ALOGE("%s: Exit; status=0x0%X", fn, status);
+    LOG(INFO) << StringPrintf("%s: Exit; status=0x0%X", fn, status);
     return status;
 }
 
@@ -114,7 +118,7 @@ bool JCDNLD_DeInit()
 {
     static const char fn[] = "JCDNLD_DeInit";
     bool    stat = false;
-    ALOGD("%s: enter", fn);
+    LOG(INFO) << StringPrintf("%s: enter", fn);
 
     if(gpJcopOs_Dwnld_Context != NULL)
     {
@@ -127,19 +131,19 @@ bool JCDNLD_DeInit()
                 stat = channel->close(jcHandle);
                 if(stat != true)
                 {
-                    ALOGE("%s:closing DWP channel is failed", fn);
+                    LOG(ERROR) << StringPrintf("%s:closing DWP channel is failed", fn);
                 }
             }
             else
             {
-                ALOGE("%s: NULL fp DWP_close", fn);
+                LOG(ERROR) << StringPrintf("%s: NULL fp DWP_close", fn);
                 stat = false;
             }
         }
     }
     else
     {
-        ALOGE("%s: NULL dwnld context", fn);
+        LOG(ERROR) << StringPrintf("%s: NULL dwnld context", fn);
     }
     jd->finalize();
     /*TODO: inUse assignment should be with protection like using semaphore*/

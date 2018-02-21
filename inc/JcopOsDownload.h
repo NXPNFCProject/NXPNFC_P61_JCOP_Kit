@@ -1,19 +1,20 @@
- /*
-  * Copyright (C) 2015 NXP Semiconductors
-  *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  *
-  *      http://www.apache.org/licenses/LICENSE-2.0
-  *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  */
-
+/******************************************************************************
+ *
+ *  Copyright 2018 NXP
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ ******************************************************************************/
 #include "data_types.h"
 #include "IChannel.h"
 #include <stdio.h>
@@ -60,6 +61,9 @@ static uint8_t GetInfo_APDU[] = {0x00, //CLA
                                0x00 //Le
                               };
 static uint8_t GetInfo_Data[] = {0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x72, 0x4F, 0x53};
+
+static uint8_t Uai_Trigger_APDU[] = {0x4F, 0x70, 0x80, 0x13, 0x04, 0x4A, 0x55, 0x41, 0x49, 0x00};
+static uint8_t Uai_GetInfo_APDU[] = {0x80,0xCA,0x00,0xFE,0x02,0xDF,0x43,0x00};
 
 #define OSID_OFFSET  9
 #define VER1_OFFSET  10
@@ -130,11 +134,15 @@ tJBL_STATUS JcopOs_Download();
 
 tJBL_STATUS TriggerApdu(JcopOs_ImageInfo_t* pVersionInfo, tJBL_STATUS status, JcopOs_TranscieveInfo_t* pTranscv_Info);
 
+tJBL_STATUS UaiTriggerApdu(JcopOs_ImageInfo_t* pVersionInfo, tJBL_STATUS status, JcopOs_TranscieveInfo_t* pTranscv_Info);
+
 tJBL_STATUS GetInfo(JcopOs_ImageInfo_t* pVersionInfo, tJBL_STATUS status, JcopOs_TranscieveInfo_t* pTranscv_Info);
 
 tJBL_STATUS load_JcopOS_image(JcopOs_ImageInfo_t *Os_info, tJBL_STATUS status, JcopOs_TranscieveInfo_t *pTranscv_Info);
 
 tJBL_STATUS JcopOs_update_seq_handler();
+
+tJBL_STATUS SendUAICmds(JcopOs_ImageInfo_t *Os_info, tJBL_STATUS status, JcopOs_TranscieveInfo_t *pTranscv_Info);
 
 IChannel_t *mchannel;
 

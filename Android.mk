@@ -17,11 +17,21 @@ LOCAL_PRELINK_MODULE := false
 LOCAL_ARM_MODE := arm
 LOCAL_MODULE := libp61-jcop-kit
 LOCAL_MODULE_TAGS := optional
-LOCAL_SHARED_LIBRARIES := libhardware_legacy libcutils liblog libdl libhardware
+LOCAL_SHARED_LIBRARIES := \
+libnativehelper \
+libcutils \
+libutils \
+liblog libdl \
+libhardware \
+libbase \
+libchrome
+
 LOCAL_CFLAGS := $(D_CFLAGS)
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/include/ \
-    $(LOCAL_PATH)/inc/
+    $(LOCAL_PATH)/inc/ \
+    system/nfc/utils/include
+
 LOCAL_SRC_FILES := \
     $(call all-c-files-under, src) \
     $(call all-cpp-files-under, src)
