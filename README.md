@@ -28,3 +28,4 @@
 | android-8.0.0_r4               |  8.2.0_O (PN557) |  SEAccessKit_AR8.2.0_OpnSrc |
 | android-8.0.0_r4               |  8.2.3_O (PN557) |  SEAccessKit_AR8.2.3_OpnSrc |
 | android-8.0.0_r4               |  8.3.0_O (PN548C2/PN551/PN553) |  SEAccessKit_AR8.3.0_OpnSrc |
+| aosp-master               |  9.00.02 (SN100x) |  NFC_NCIHALx_AR2000.09.00.02_OpnSrc |
