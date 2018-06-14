@@ -97,7 +97,6 @@ tJBL_STATUS ALA_Start(const char *name, uint8_t *pdata, uint16_t len)
 {
     static const char fn[] = "ALA_Start";
     tJBL_STATUS status = STATUS_FAILED;
-    IChannel_t *channel = gpAla_Dwnld_Context->mchannel;
     if(name != NULL)
     {
         ALOGE("%s: name is %s", fn, name);
@@ -245,7 +244,6 @@ tJBL_STATUS ALA_lsGetVersion(uint8_t *pVersion)
 {
     static const char fn[] = "ALA_lsGetVersion";
     tJBL_STATUS status = STATUS_FAILED;
-    IChannel_t *channel = gpAla_Dwnld_Context->mchannel;
     if(pVersion!= NULL)
     {
         status = GetLs_Version(pVersion);
@@ -271,7 +269,6 @@ tJBL_STATUS ALA_lsGetStatus(uint8_t *pVersion)
 {
     static const char fn[] = "ALA_lsGetStatus";
     tJBL_STATUS status = STATUS_FAILED;
-    IChannel_t *channel = gpAla_Dwnld_Context->mchannel;
     if(pVersion!= NULL)
     {
         status = Get_LsStatus(pVersion);
@@ -297,7 +294,6 @@ tJBL_STATUS ALA_lsGetAppletStatus(uint8_t *pVersion)
 {
     static const char fn[] = "ALA_lsGetStatus";
     tJBL_STATUS status = STATUS_FAILED;
-    IChannel_t *channel = gpAla_Dwnld_Context->mchannel;
     if(pVersion!= NULL)
     {
         status = Get_LsAppletStatus(pVersion);

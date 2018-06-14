@@ -94,7 +94,6 @@ tJBL_STATUS JCDNLD_StartDownload()
 {
     static const char fn[] = "JCDNLD_StartDownload";
     tJBL_STATUS status = STATUS_FAILED;
-    bool    stat = false;
 
     status = jd->JcopOs_Download();
     ALOGE("%s: Exit; status=0x0%X", fn, status);

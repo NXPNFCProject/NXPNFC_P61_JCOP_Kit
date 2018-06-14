@@ -71,7 +71,6 @@ JcopOsDwnld* JcopOsDwnld::getInstance()
 *******************************************************************************/
 bool JcopOsDwnld::getJcopOsFileInfo()
 {
-    static const char fn [] = "JcopOsDwnld::getJcopOsFileInfo";
     bool status = true;
     struct stat st;
 
@@ -186,8 +185,6 @@ tJBL_STATUS JcopOsDwnld::JcopOs_Download()
 {
     static const char fn [] = "JcopOsDwnld::JcopOs_Download";
     tJBL_STATUS wstatus = STATUS_FAILED;
-    JcopOs_TranscieveInfo_t pTranscv_Info;
-    JcopOs_ImageInfo_t ImageInfo;
     uint8_t retry_cnt = 0x00;
     ALOGD("%s: enter:", fn);
     if(mIsInit == false)
@@ -424,7 +421,7 @@ tJBL_STATUS JcopOsDwnld::load_JcopOS_image(JcopOs_ImageInfo_t *Os_info, tJBL_STA
 {
     static const char fn [] = "JcopOsDwnld::load_JcopOS_image";
     bool stat = false;
-    int wResult, size =0;
+    int wResult;
     int32_t wIndex,wCount=0;
     int32_t wLen;
 

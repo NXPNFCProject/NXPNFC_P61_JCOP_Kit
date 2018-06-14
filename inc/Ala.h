@@ -198,20 +198,20 @@ tJBL_STATUS Perform_ALA(const char *path, const uint8_t *pdata, uint16_t len);
 tJBL_STATUS GetJsbl_Certificate_Refkey(uint8_t *pkey, int32_t *pKeylen);
 
 static tJBL_STATUS
-ALA_OpenChannel(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo);
+ALA_OpenChannel(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo) __attribute__((unused));
 
 static tJBL_STATUS
-ALA_SelectAla(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo);
+ALA_SelectAla(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo) __attribute__((unused));
 
 static tJBL_STATUS
-ALA_StoreData(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo);
+ALA_StoreData(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo) __attribute__((unused));
 
 static tJBL_STATUS
-ALA_loadapplet(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info);
+ALA_loadapplet(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info) __attribute__((unused));
 
 #if(NXP_LDR_SVC_VER_2 == TRUE)
 static tJBL_STATUS
-ALA_update_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo), const char *name, const char *dest);
+ALA_update_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo), const char *name, const char *dest) __attribute__((unused));
 
 tJBL_STATUS GetLs_Version(uint8_t *pKey);
 
@@ -244,9 +244,10 @@ tJBL_STATUS Get_LsAppletStatus(uint8_t *pVersion);
 static tJBL_STATUS
 ALA_update_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo), const char *name);
 #endif
+#if(NXP_LDR_SVC_VER_2 == FALSE)
 static tJBL_STATUS
 JsblCerId_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t* pContext, tJBL_STATUS status, Ala_TranscieveInfo_t* pInfo));
-
+#endif
 tJBL_STATUS ALA_SendtoEse(Ala_ImageInfo_t *Os_info, tJBL_STATUS status, Ala_TranscieveInfo_t *pTranscv_Info);
 #if(NXP_LDR_SVC_VER_2 == TRUE)
 tJBL_STATUS GetLsStatus_seq_handler(tJBL_STATUS (*seq_handler[])(Ala_ImageInfo_t*
